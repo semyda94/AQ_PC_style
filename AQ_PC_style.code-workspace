@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"name": "AQ_PC_style",
+			"path": "AQ_PC_style"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"lvgl.h": "c",
+			"tft_espi.h": "c",
+			"ui_setup.h": "c",
+			"arduino.h": "c",
+			"ui.h": "c"
+		}
+	}
+}
