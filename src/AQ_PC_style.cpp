@@ -4,6 +4,9 @@
 //UI
 #include "UiSetup/ui_setup.h"
 
+//AQI
+#include "sensors/sensors.h"
+
 //On Led
 int ArduinoLED = 8;
 
@@ -24,6 +27,8 @@ void setup() {
   while (!Serial) {}
 
   tft_ui_setup();
+
+  setupSensors();
 }
 
 /*--------------------------------------------------------------------------
@@ -33,19 +38,19 @@ void setup() {
 
 
 void loop() {
-  digitalWrite(ArduinoLED, HIGH);
-  //Button
-  // read the state of the switch/button:
-  // currentState = digitalRead(SwitchButtonPin);
+  // digitalWrite(ArduinoLED, HIGH);
+  // //Button
+  // // read the state of the switch/button:
+  // // currentState = digitalRead(SwitchButtonPin);
 
-  // if(lastState == LOW && currentState == HIGH)
-  Serial.println("The state changed from LOW to HIGH");
+  // // if(lastState == LOW && currentState == HIGH)
+  // Serial.println("The state changed from LOW to HIGH");
   
   // save the last state
   // lastState = currentState;
   delay(1000);
 
-  digitalWrite(ArduinoLED, LOW);
+  // digitalWrite(ArduinoLED, LOW);
 
   delay(1000);
 }
