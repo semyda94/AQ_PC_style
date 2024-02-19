@@ -1,10 +1,7 @@
 
 #include <Arduino.h>
 
-//UI
 #include "UiSetup/ui_setup.h"
-
-//AQI
 #include "sensors/sensors.h"
 
 //On Led
@@ -33,7 +30,6 @@ void setup() {
 
 /*--------------------------------------------------------------------------
   MAIN LOOP FUNCTION
-  Cylce every 1000ms and perform measurement
  --------------------------------------------------------------------------*/
 
 

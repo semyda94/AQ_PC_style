@@ -39,7 +39,7 @@ void tft_ui_setup(void)
   lv_init();
 
   tft.begin();          /* TFT init */
-  tft.setRotation( 3 ); /* Landscape orientation, flipped */
+  tft.setRotation( 2 ); /* Landscape orientation, flipped */
 
 
   lv_disp_draw_buf_init( &draw_buf, buf, NULL, ScreenWidth * ScreenHeight / 10 );

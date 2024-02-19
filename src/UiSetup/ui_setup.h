@@ -30,7 +30,7 @@ extern "C" {
 //   #include "lvgl.h"
 // #endif
 
-#define ScreenWidth 320
+#define ScreenWidth 240
 #define ScreenHeight 240
 
 void tft_ui_setup(void);

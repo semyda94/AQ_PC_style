@@ -1,5 +1,5 @@
 #include "sensors.h"
-#include "aht/aht.h"
+#include "aht/ahtAdafruit.h"
 #include "ens/ens.h"
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
