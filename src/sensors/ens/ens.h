@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "ScioSense_ENS160.h"
+#include "../../ui/ui.h"
 
 void setupEns(void);
 void getAqiCo2(void);

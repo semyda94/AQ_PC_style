@@ -3,13 +3,19 @@
 
 static lv_disp_draw_buf_t draw_buf;
 static lv_color_t buf[ ScreenWidth * ScreenHeight / 10 ];
+unsigned long last_time = millis();
+unsigned long current_time = last_time;
 
 TFT_eSPI tft = TFT_eSPI(ScreenWidth, ScreenHeight); /* TFT instance */
 
 
 void amimationLoop(void* pvParameters){
   while (1) {
-    lv_timer_handler(); /* let the GUI do its work */
+    current_time = millis();
+    lv_tick_inc(current_time - last_time);
+    last_time = current_time;
+    lv_task_handler();
+    // lv_timer_handler(); /* let the GUI do its work */
     delay( 5 );
   }
 }
@@ -39,7 +45,8 @@ void tft_ui_setup(void)
   lv_init();
 
   tft.begin();          /* TFT init */
-  tft.setRotation( 2 ); /* Landscape orientation, flipped */
+  tft.setRotation( 3 ); /* Landscape orientation, flipped */
+  // tft.setRotation( 4 ); /*Round*/
 
 
   lv_disp_draw_buf_init( &draw_buf, buf, NULL, ScreenWidth * ScreenHeight / 10 );
@@ -67,14 +74,4 @@ void tft_ui_setup(void)
   ui_init();
 
   Serial.println( "UI Setup done" );
-
-  xTaskCreatePinnedToCore (
-    amimationLoop,     // Function to implement the task
-    "amimationLoop",   // Name of the task
-    4096*2,      // Stack size in words
-    NULL,      // Task input parameter
-    5,         // Priority of the task
-    NULL,      // Task handle.
-    0          // Core where the task should run
-  );
 }

@@ -3,8 +3,9 @@
 
 #include <Arduino.h>
 #include <Adafruit_AHTX0.h>
+#include "../../ui/ui.h"
 
 void setupAht(void);
-void getTemperatureAndHumidity(void);
+// void getTemperatureAndHumidity(void);
 
 #endif

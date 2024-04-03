@@ -47,27 +47,33 @@ void setupAht(void)
     Serial.println(F("AHT20 OK"));
 }
 
-void getTemperatureAndHumidity(void)
-{
-    //  /* Get a new normalized sensor event */
-  sensors_event_t humidity;
-  sensors_event_t temp;
-  aht_humidity->getEvent(&humidity);
-  aht_temp->getEvent(&temp);
+// void getTemperatureAndHumidity(void)
+// {
+//   /* Get a new normalized sensor event */
+//   sensors_event_t humidity;
+//   sensors_event_t temp;
+//   aht_humidity->getEvent(&humidity);
+//   aht_temp->getEvent(&temp);
 
-  Serial.print("\t\tTemperature ");
-  Serial.print(temp.temperature);
-  Serial.println(" deg C");
+//   /* Display the results (humidity is measured in % relative humidity (% rH) */
+//   Serial.print("\t\tHumidity: ");
+//   Serial.print(humidity.relative_humidity);
+//   Serial.println(" % rH");
+//   Serial.print("\t\tTemperature: ");
+//   Serial.print(temp.temperature);
+//   Serial.println(" degrees C");
 
-  /* Display the results (humidity is measured in % relative humidity (% rH) */
-  Serial.print("\t\tHumidity: ");
-  Serial.print(humidity.relative_humidity);
-  Serial.println(" % rH");
-  Serial.print("\t\tTemperature: ");
-  Serial.print(temp.temperature);
-  Serial.println(" degrees C");
+//   char tempBuff[20];
+//   snprintf (tempBuff, sizeof(tempBuff), "%.1fC", temp.temperature);
+//   // lv_label_set_text(ui_MinimalTemperatureValueLabel, tempBuff );
+//   // lv_arc_set_value(ui_TemperatureArc, temp.temperature * 100);
 
-}
+//   char humBuff[20];
+//   snprintf (humBuff, sizeof(humBuff), "%.1f\%", humidity.relative_humidity);
+//   // lv_label_set_text(ui_MinimalHumidityValueLabel, humBuff );
+//   // lv_arc_set_value(ui_HumidityArc, humidity.relative_humidity * 100 );
+
+// }
 
 // void printStatus()
 // {

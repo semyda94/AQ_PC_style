@@ -4,6 +4,8 @@
 
 ScioSense_ENS160      ens160(ENS160_I2CADDR_1);
 
+uint8_t aqiLast = 0;
+
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
 void setupEns(void);
@@ -52,6 +54,12 @@ void getAqiCo2(void)
 
         uint8_t aqi = ens160.getAQI();
         uint16_t eco = ens160.geteCO2();
+
+        if (aqi >= 3) {
+            
+        }
+
+        aqiLast = aqi;
   
     // char buff[20];
     // snprintf (buff, sizeof(buff), "d C +-2%", aqi);
@@ -73,10 +81,15 @@ void getAqiCo2(void)
     //     break;
     // }
 
-    // char buff[20];
-    // snprintf (buff, sizeof(buff), "%d ppm", eco);
-    // lv_label_set_text(ui_Eco2ValueLabel, buff);
-    
+    char buff[20];
+    snprintf (buff, sizeof(buff), "%d ppm", eco);
+    // lv_label_set_text(ui_MinimalCO2ValueLabel, buff);
 
+    if (eco >= 1500) {
+        // lv_arc_set_value(ui_MinimalCO2Arc, 100);
+    } else {
+        float ecoP = eco / 1500;
+        // lv_arc_set_value(ui_MinimalCO2Arc, ecoP * 100);
+    }
   }
 }

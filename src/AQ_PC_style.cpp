@@ -26,6 +26,27 @@ void setup() {
   tft_ui_setup();
 
   setupSensors();
+
+  xTaskCreatePinnedToCore (
+    amimationLoop,     // Function to implement the task
+    "amimationLoop",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    5,         // Priority of the task
+    NULL,      // Task handle.
+    0          // Core where the task should run
+  );
+
+  xTaskCreatePinnedToCore (
+    sensorMeasurements,     // Function to implement the task
+    "sensorMeasurements",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    6,         // Priority of the task
+    NULL,      // Task handle.
+    1          // Core where the task should run
+  );
+
 }
 
 /*--------------------------------------------------------------------------
@@ -34,7 +55,7 @@ void setup() {
 
 
 void loop() {
-  // digitalWrite(ArduinoLED, HIGH);
+  digitalWrite(ArduinoLED, HIGH);
   // //Button
   // // read the state of the switch/button:
   // // currentState = digitalRead(SwitchButtonPin);
@@ -46,7 +67,7 @@ void loop() {
   // lastState = currentState;
   delay(1000);
 
-  // digitalWrite(ArduinoLED, LOW);
+  digitalWrite(ArduinoLED, LOW);
 
   delay(1000);
 }

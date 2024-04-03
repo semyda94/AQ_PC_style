@@ -4,5 +4,6 @@
 #include <Arduino.h>
 
 void setupSensors(void);
+void sensorMeasurements(void* pvParameters);
 
 #endif
