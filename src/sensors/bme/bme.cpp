@@ -30,24 +30,27 @@ void setupBme(void)
 
 void getTemperatureAndHumidity(void)
 {
+  float temp = bme.readTemperature();
+  float hum = bme.readHumidity();
 
   /* Display the results (humidity is measured in % relative humidity (% rH) */
   Serial.print("\t\tHumidity: ");
-  Serial.print(bme.readHumidity());
+  Serial.print(hum);
   Serial.println(" % rH");
   Serial.print("\t\tTemperature: ");
-  Serial.print(bme.readTemperature());
+  Serial.print(temp);
   Serial.println(" degrees C");
 
+
   char tempBuff[20];
-  snprintf (tempBuff, sizeof(tempBuff), "%.1fC", bme.readTemperature());
-  // lv_label_set_text(ui_MinimalTemperatureValueLabel, tempBuff );
-  // lv_arc_set_value(ui_TemperatureArc, temp.temperature * 100);
+  snprintf (tempBuff, sizeof(tempBuff), "%.1f C", temp);
+  lv_label_set_text(ui_MinimalTemperatureValueLabel, tempBuff );
+  lv_arc_set_value(ui_MinimalTemperatureArc, temp * 100);
 
   char humBuff[20];
-  snprintf (humBuff, sizeof(humBuff), "%.1f\%", bme.readHumidity());
-  // lv_label_set_text(ui_MinimalHumidityValueLabel, humBuff );
-  // lv_arc_set_value(ui_HumidityArc, humidity.relative_humidity * 100 );
+  snprintf (humBuff, sizeof(humBuff), "%.1f %", hum);
+  lv_label_set_text(ui_MinimalHumidityValueLabel, humBuff );
+  lv_arc_set_value(ui_MinimalHumidityArc, hum * 100 );
 
 }
 

@@ -28,11 +28,19 @@ extern "C" {
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 extern lv_obj_t *ui_Screen1;
-extern lv_obj_t *ui_Image1;
+extern lv_obj_t *ui_BG_and_main_screen;
+extern lv_obj_t *ui_MinimalHumidityArc;
+extern lv_obj_t *ui_MinimalTemperatureArc;
+extern lv_obj_t *ui_MinimalTemperatureValueLabel;
+extern lv_obj_t *ui_MinimalHumidityValueLabel;
+extern lv_obj_t *ui_MinimalEco2Label;
+extern lv_obj_t *ui_MinimalTvocLabel;
+extern lv_obj_t *ui_MinimalEcoArc;
+extern lv_obj_t *ui_MinimalTvocArc;
 extern lv_obj_t *ui____initial_actions0;
 
+LV_IMG_DECLARE( ui_img_pcscreenupdated_png);   // assets/PCScreenUpdated.png
 LV_IMG_DECLARE( ui_img_aq_pc_style_bg2_png);   // assets/AQ_PC_style_bg2.png
-LV_IMG_DECLARE( ui_img_aq_pc_style_screen1_png);   // assets/AQ_PC_style_Screen1.png
 
 
 

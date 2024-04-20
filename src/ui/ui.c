@@ -12,9 +12,16 @@
 // SCREEN: ui_Screen1
 void ui_Screen1_screen_init(void);
 lv_obj_t *ui_Screen1;
-lv_obj_t *ui_Image1;
+lv_obj_t *ui_BG_and_main_screen;
+lv_obj_t *ui_MinimalHumidityArc;
+lv_obj_t *ui_MinimalTemperatureArc;
+lv_obj_t *ui_MinimalTemperatureValueLabel;
+lv_obj_t *ui_MinimalHumidityValueLabel;
+lv_obj_t *ui_MinimalEco2Label;
+lv_obj_t *ui_MinimalTvocLabel;
+lv_obj_t *ui_MinimalEcoArc;
+lv_obj_t *ui_MinimalTvocArc;
 lv_obj_t *ui____initial_actions0;
-const lv_img_dsc_t *ui_imgset_aq_pc_style_screen[1] = {&ui_img_aq_pc_style_screen1_png};
 const lv_img_dsc_t *ui_imgset_aq_pc_style_bg[1] = {&ui_img_aq_pc_style_bg2_png};
 
 ///////////////////// TEST LVGL SETTINGS ////////////////////

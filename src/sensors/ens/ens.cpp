@@ -54,6 +54,17 @@ void getAqiCo2(void)
 
         uint8_t aqi = ens160.getAQI();
         uint16_t eco = ens160.geteCO2();
+        uint16_t tvoc = ens160.getTVOC();
+
+        char ecoBuff[20];
+        snprintf (ecoBuff, sizeof(ecoBuff), "%d ppm", eco);
+        lv_label_set_text(ui_MinimalEco2Label, ecoBuff );
+        lv_arc_set_value(ui_MinimalEcoArc, eco);
+
+        char tvocBuff[20];
+        snprintf (tvocBuff, sizeof(tvocBuff), "%d ppb", tvoc);
+        lv_label_set_text(ui_MinimalTvocLabel, tvocBuff );
+        lv_arc_set_value(ui_MinimalTvocArc, tvoc );
 
         if (aqi >= 3) {
             
