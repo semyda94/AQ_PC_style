@@ -25,22 +25,49 @@ extern "C" {
 #include "ui_helpers.h"
 #include "ui_events.h"
 
-// SCREEN: ui_Screen1
-void ui_Screen1_screen_init(void);
-extern lv_obj_t *ui_Screen1;
-extern lv_obj_t *ui_BG_and_main_screen;
+void HideAqi_Animation( lv_obj_t *TargetObject, int delay);
+void ShowAqi_Animation( lv_obj_t *TargetObject, int delay);
+void LoadingAnim_Animation( lv_obj_t *TargetObject, int delay);
+// SCREEN: ui_LoadingScreen
+void ui_LoadingScreen_screen_init(void);
+void ui_event_LoadingScreen( lv_event_t * e);
+extern lv_obj_t *ui_LoadingScreen;
+extern lv_obj_t *ui_Logo;
+extern lv_obj_t *ui_LoadingBar;
+extern lv_obj_t *ui_LoadingStatusLabel;
+extern lv_obj_t *ui_LoaderInd1;
+extern lv_obj_t *ui_LoaderInd2;
+extern lv_obj_t *ui_LoaderInd3;
+// SCREEN: ui_DataScreen
+void ui_DataScreen_screen_init(void);
+extern lv_obj_t *ui_DataScreen;
+extern lv_obj_t *ui_Wallpaper;
+extern lv_obj_t *ui_Data;
+extern lv_obj_t *ui_Container1;
 extern lv_obj_t *ui_MinimalHumidityArc;
 extern lv_obj_t *ui_MinimalTemperatureArc;
 extern lv_obj_t *ui_MinimalTemperatureValueLabel;
 extern lv_obj_t *ui_MinimalHumidityValueLabel;
+extern lv_obj_t *ui_Container2;
 extern lv_obj_t *ui_MinimalEco2Label;
 extern lv_obj_t *ui_MinimalTvocLabel;
-extern lv_obj_t *ui_MinimalEcoArc;
 extern lv_obj_t *ui_MinimalTvocArc;
+extern lv_obj_t *ui_MinimalEcoArc;
+extern lv_obj_t *ui_Button1;
 extern lv_obj_t *ui____initial_actions0;
 
-LV_IMG_DECLARE( ui_img_pcscreenupdated_png);   // assets/PCScreenUpdated.png
-LV_IMG_DECLARE( ui_img_aq_pc_style_bg2_png);   // assets/AQ_PC_style_bg2.png
+LV_IMG_DECLARE( ui_img_retroboxicon1_png);   // assets/RetroBoxIcon1.png
+LV_IMG_DECLARE( ui_img_loadingbar_png);   // assets/LoadingBar.png
+LV_IMG_DECLARE( ui_img_loader_ind__1_png);   // assets/Loader_Ind _1.png
+LV_IMG_DECLARE( ui_img_loader_ind_2_png);   // assets/Loader_Ind_2.png
+LV_IMG_DECLARE( ui_img_loader_ind_3_png);   // assets/Loader_Ind_3.png
+LV_IMG_DECLARE( ui_img_wallpaper_png);   // assets/Wallpaper.png
+LV_IMG_DECLARE( ui_img_datascreen_420_320_png);   // assets/DataScreen_420_320.png
+LV_IMG_DECLARE( ui_img_settingsscreen_png);   // assets/SettingsScreen.png
+LV_IMG_DECLARE( ui_img_network_connections_png);   // assets/Network Connections.png
+LV_IMG_DECLARE( ui_img_appearence_png);   // assets/Appearence.png
+LV_IMG_DECLARE( ui_img_date_and_time_png);   // assets/Date and Time.png
+LV_IMG_DECLARE( ui_img_networkconnectionsscreen_png);   // assets/NetworkConnectionsScreen.png
 
 
 

@@ -1,11 +1,14 @@
 
 #include <Arduino.h>
 
+#include <Wire.h>
+
 #include "UiSetup/ui_setup.h"
 #include "sensors/sensors.h"
+#include "actionControl/actionControl.h"
 
 //On Led
-int ArduinoLED = 8;
+int ArduinoLED = 38;
 
 /*--------------------------------------------------------------------------
   SETUP function
@@ -16,36 +19,78 @@ int ArduinoLED = 8;
 void setup() {
 
   //Switch on LED for init
-  pinMode(ArduinoLED, OUTPUT);
-  digitalWrite(ArduinoLED, LOW);
+  // pinMode(ArduinoLED, OUTPUT);
+  // digitalWrite(ArduinoLED, LOW);
+
   
   Serial.begin(115200);
 
   while (!Serial) {}
 
-  tft_ui_setup();
+  char tempBuff[20];
 
-  setupSensors();
 
-  xTaskCreatePinnedToCore (
-    amimationLoop,     // Function to implement the task
-    "amimationLoop",   // Name of the task
-    4096*2,      // Stack size in words
-    NULL,      // Task input parameter
-    5,         // Priority of the task
-    NULL,      // Task handle.
-    0          // Core where the task should run
-  );
+  // Below
 
-  xTaskCreatePinnedToCore (
-    sensorMeasurements,     // Function to implement the task
-    "sensorMeasurements",   // Name of the task
-    4096*2,      // Stack size in words
-    NULL,      // Task input parameter
-    6,         // Priority of the task
-    NULL,      // Task handle.
-    1          // Core where the task should run
-  );
+  // tft_ui_setup();
+
+  // setupActionButtons();
+
+  // xTaskCreatePinnedToCore (
+  //   amimationLoop,     // Function to implement the task
+  //   "amimationLoop",   // Name of the task
+  //   4096*2,      // Stack size in words
+  //   NULL,      // Task input parameter
+  //   5,         // Priority of the task
+  //   NULL,      // Task handle.
+  //   0          // Core where the task should run
+  // );
+
+  // snprintf (tempBuff, sizeof(tempBuff), "Screen check");
+  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+
+  // delay(2000);
+  // // setupSensors();
+
+  // snprintf (tempBuff, sizeof(tempBuff), "Sensors check");
+  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+
+  // delay(2000);
+
+  // snprintf (tempBuff, sizeof(tempBuff), "All good to go");
+  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+
+  // delay(2000);
+
+
+  // Above
+
+  // scan();
+
+  // wspConnect();
+
+
+  // xTaskCreatePinnedToCore (
+  //   sensorMeasurements,     // Function to implement the task
+  //   "sensorMeasurements",   // Name of the task
+  //   4096*2,      // Stack size in words
+  //   NULL,      // Task input parameter
+  //   6,         // Priority of the task
+  //   NULL,      // Task handle.
+  //   1          // Core where the task should run
+  // );
+
+  // ActiveScreen->SwitchScreen();
+
+  // xTaskCreatePinnedToCore (
+  //   actionControl,     // Function to implement the task
+  //   "actionControl",   // Name of the task
+  //   4096*2,      // Stack size in words
+  //   NULL,      // Task input parameter
+  //   8,         // Priority of the task
+  //   NULL,      // Task handle.
+  //   1          // Core where the task should run
+  // );
 
 }
 
@@ -55,21 +100,46 @@ void setup() {
 
 
 void loop() {
-  digitalWrite(ArduinoLED, HIGH);
-  // //Button
-  // // read the state of the switch/button:
-  // // currentState = digitalRead(SwitchButtonPin);
-
-  // // if(lastState == LOW && currentState == HIGH)
-  // Serial.println("The state changed from LOW to HIGH");
+  // digitalWrite(ArduinoLED, HIGH);
   
-  // save the last state
-  // lastState = currentState;
-  delay(1000);
+  // delay(1000);
 
-  digitalWrite(ArduinoLED, LOW);
+  // digitalWrite(ArduinoLED, LOW);
 
-  delay(1000);
+  // delay(1000);
+
+  Serial.println("Working .... Horray");
+
+  // byte error, address;
+  // int nDevices;
+  // Serial.println("Scanning...");
+  // nDevices = 0;
+  // for(address = 1; address < 127; address++ ) {
+  //   Wire.beginTransmission(address);
+  //   error = Wire.endTransmission();
+  //   if (error == 0) {
+  //     Serial.print("I2C device found at address 0x");
+  //     if (address<16) {
+  //       Serial.print("0");
+  //     }
+  //     Serial.println(address,HEX);
+  //     nDevices++;
+  //   }
+  //   else if (error==4) {
+  //     Serial.print("Unknow error at address 0x");
+  //     if (address<16) {
+  //       Serial.print("0");
+  //     }
+  //     Serial.println(address,HEX);
+  //   }    
+  // }
+  // if (nDevices == 0) {
+  //   Serial.println("No I2C devices found\n");
+  // }
+  // else {
+  //   Serial.println("done\n");
+  // }
+  delay(1000); 
 }
   
 

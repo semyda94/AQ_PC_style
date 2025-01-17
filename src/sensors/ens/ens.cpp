@@ -24,6 +24,7 @@ void setupEns(void)
     delay(1000);
 
     Serial.print("ENS160...");
+    // ens160.setI2C(40, 41);
     ens160.begin();
     Serial.println(ens160.available() ? "done." : "failed!");
 
@@ -61,9 +62,6 @@ void getAqiCo2(void)
         lv_label_set_text(ui_MinimalEco2Label, ecoBuff );
         lv_arc_set_value(ui_MinimalEcoArc, eco);
 
-        char tvocBuff[20];
-        snprintf (tvocBuff, sizeof(tvocBuff), "%d ppb", tvoc);
-        lv_label_set_text(ui_MinimalTvocLabel, tvocBuff );
         lv_arc_set_value(ui_MinimalTvocArc, tvoc );
 
         if (aqi >= 3) {
@@ -72,35 +70,22 @@ void getAqiCo2(void)
 
         aqiLast = aqi;
   
-    // char buff[20];
-    // snprintf (buff, sizeof(buff), "d C +-2%", aqi);
-    // switch(aqi) {
-    //   case 1: 
-    //     lv_label_set_text(ui_AqiValueLabel, "Great");
-    //     break;
-    //   case 2: 
-    //     lv_label_set_text(ui_AqiValueLabel, "Good");
-    //     break;
-    //   case 3: 
-    //     lv_label_set_text(ui_AqiValueLabel, "Fair");
-    //     break;
-    //   case 4: 
-    //     lv_label_set_text(ui_AqiValueLabel, "Poor");
-    //     break;
-    //   case 5: 
-    //     lv_label_set_text(ui_AqiValueLabel, "Bad");
-    //     break;
-    // }
-
-    char buff[20];
-    snprintf (buff, sizeof(buff), "%d ppm", eco);
-    // lv_label_set_text(ui_MinimalCO2ValueLabel, buff);
-
-    if (eco >= 1500) {
-        // lv_arc_set_value(ui_MinimalCO2Arc, 100);
-    } else {
-        float ecoP = eco / 1500;
-        // lv_arc_set_value(ui_MinimalCO2Arc, ecoP * 100);
+    switch(aqi) {
+      case 1: 
+        lv_label_set_text(ui_MinimalTvocLabel, "Great");
+        break;
+      case 2: 
+        lv_label_set_text(ui_MinimalTvocLabel, "Good");
+        break;
+      case 3: 
+        lv_label_set_text(ui_MinimalTvocLabel, "Fair");
+        break;
+      case 4: 
+        lv_label_set_text(ui_MinimalTvocLabel, "Poor");
+        break;
+      case 5: 
+        lv_label_set_text(ui_MinimalTvocLabel, "Bad");
+        break;
     }
   }
 }

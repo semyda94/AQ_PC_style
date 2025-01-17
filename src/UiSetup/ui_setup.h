@@ -30,8 +30,11 @@ extern "C" {
 //   #include "lvgl.h"
 // #endif
 
-#define ScreenWidth 320
-#define ScreenHeight 240
+// #define ScreenWidth 320
+// #define ScreenHeight 240
+
+#define ScreenWidth 480
+#define ScreenHeight 320
 
 void tft_ui_setup(void);
 void amimationLoop(void* pvParameters);

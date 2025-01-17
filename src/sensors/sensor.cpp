@@ -2,6 +2,7 @@
 #include "aht/ahtAdafruit.h"
 #include "bme/bme.h"
 #include "ens/ens.h"
+#include "scd/scd.h"
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
@@ -12,8 +13,12 @@
 
 void setupSensors(void) 
 {
+    Serial.print("   wire created\n");
     setupEns();
     setupBme();
+
+    // setupScd();
+
     // setupAht();
 }
 
@@ -24,6 +29,8 @@ void sensorMeasurements(void* pvParameters)
     getAqiCo2();
     getTemperatureAndHumidity();
 
-    delay(60000);
+    // getAqi();
+
+    delay(5000);
   }
 }

@@ -14,8 +14,14 @@ void setupBme(void)
 {
     unsigned status;
     
+    // TwoWire wire = TwoWire(0);
+    // wire.begin(40, 41);
     // default settings
-    status = bme.begin(0x76);  
+    status = bme.begin(0x76); // c3
+
+    // status = bme.begin(0x60); // s3
+
+    // status = bme.begin(0x76, &wire);  
     // You can also pass in a Wire library object like &Wire2
     // status = bme.begin(0x76, &Wire2)
     if (!status) {
@@ -48,38 +54,8 @@ void getTemperatureAndHumidity(void)
   lv_arc_set_value(ui_MinimalTemperatureArc, temp * 100);
 
   char humBuff[20];
-  snprintf (humBuff, sizeof(humBuff), "%.1f %", hum);
+  snprintf (humBuff, sizeof(humBuff), "%.1f %%", hum);
   lv_label_set_text(ui_MinimalHumidityValueLabel, humBuff );
   lv_arc_set_value(ui_MinimalHumidityArc, hum * 100 );
 
 }
-
-// void printStatus()
-// {
-//   switch (aht20.getStatus())
-//   {
-//     case AHTXX_NO_ERROR:
-//       Serial.println(F("no error"));
-//       break;
-
-//     case AHTXX_BUSY_ERROR:
-//       Serial.println(F("sensor busy, increase polling time"));
-//       break;
-
-//     case AHTXX_ACK_ERROR:
-//       Serial.println(F("sensor didn't return ACK, not connected, broken, long wires (reduce speed), bus locked by slave (increase stretch limit)"));
-//       break;
-
-//     case AHTXX_DATA_ERROR:
-//       Serial.println(F("received data smaller than expected, not connected, broken, long wires (reduce speed), bus locked by slave (increase stretch limit)"));
-//       break;
-
-//     case AHTXX_CRC8_ERROR:
-//       Serial.println(F("computed CRC8 not match received CRC8, this feature supported only by AHT2x sensors"));
-//       break;
-
-//     default:
-//       Serial.println(F("unknown status"));    
-//       break;
-//   }
-// }
