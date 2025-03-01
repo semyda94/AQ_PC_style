@@ -2,7 +2,8 @@
 
 ///////////////////// VARIABLES DECLARATION ////////////////////
 
-ScioSense_ENS160      ens160(ENS160_I2CADDR_1);
+// ScioSense_ENS160      ens160(ENS160_I2CADDR_1);
+ScioSense_ENS160      ens160(ENS160_I2CADDR_0);
 
 uint8_t aqiLast = 0;
 
@@ -15,27 +16,25 @@ void printStatus();
 
 void setupEns(void) 
 {
-    Serial.println("------------------------------------------------------------");
-    Serial.println("ENS160 - Digital air quality sensor");
-    Serial.println();
-    Serial.println("Sensor readout in standard mode");
-    Serial.println();
-    Serial.println("------------------------------------------------------------");
-    delay(1000);
+  Serial1.println("========== BEGIN BME SENSOR (Air Quality) SETUP ==========");
+    
+  Serial1.println("Sensor readout in standard mode");
+  
+  delay(1000);
 
-    Serial.print("ENS160...");
+    Serial1.print("ENS160...");
     // ens160.setI2C(40, 41);
     ens160.begin();
-    Serial.println(ens160.available() ? "done." : "failed!");
+    Serial1.println(ens160.available() ? "done." : "failed!");
 
     if (ens160.available()) {
         // Print ENS160 versions
-        Serial.print("\tRev: "); Serial.print(ens160.getMajorRev());
-        Serial.print("."); Serial.print(ens160.getMinorRev());
-        Serial.print("."); Serial.println(ens160.getBuild());
+        Serial1.print("\tRev: "); Serial.print(ens160.getMajorRev());
+        Serial1.print("."); Serial.print(ens160.getMinorRev());
+        Serial1.print("."); Serial.println(ens160.getBuild());
   
-        Serial.print("\tStandard mode ");
-        Serial.println(ens160.setMode(ENS160_OPMODE_STD) ? "done." : "failed!");
+        Serial1.print("\tStandard mode ");
+        Serial1.println(ens160.setMode(ENS160_OPMODE_STD) ? "done." : "failed!");
     }
 }
 
@@ -45,47 +44,47 @@ void getAqiCo2(void)
         ens160.measure(true);
         ens160.measureRaw(true);
   
-        Serial.print("AQI: ");Serial.print(ens160.getAQI());Serial.print("\t");
-        Serial.print("TVOC: ");Serial.print(ens160.getTVOC());Serial.print("ppb\t");
-        Serial.print("eCO2: ");Serial.print(ens160.geteCO2());Serial.print("ppm\t");
-        Serial.print("R HP0: ");Serial.print(ens160.getHP0());Serial.print("Ohm\t");
-        Serial.print("R HP1: ");Serial.print(ens160.getHP1());Serial.print("Ohm\t");
-        Serial.print("R HP2: ");Serial.print(ens160.getHP2());Serial.print("Ohm\t");
-        Serial.print("R HP3: ");Serial.print(ens160.getHP3());Serial.println("Ohm");
+        Serial1.print("AQI: ");Serial1.print(ens160.getAQI());Serial1.print("\t");
+        Serial1.print("TVOC: ");Serial1.print(ens160.getTVOC());Serial1.print("ppb\t");
+        Serial1.print("eCO2: ");Serial1.print(ens160.geteCO2());Serial1.print("ppm\t");
+        Serial1.print("R HP0: ");Serial1.print(ens160.getHP0());Serial1.print("Ohm\t");
+        Serial1.print("R HP1: ");Serial1.print(ens160.getHP1());Serial1.print("Ohm\t");
+        Serial1.print("R HP2: ");Serial1.print(ens160.getHP2());Serial1.print("Ohm\t");
+        Serial1.print("R HP3: ");Serial1.print(ens160.getHP3());Serial1.println("Ohm");
 
         uint8_t aqi = ens160.getAQI();
         uint16_t eco = ens160.geteCO2();
         uint16_t tvoc = ens160.getTVOC();
 
-        char ecoBuff[20];
-        snprintf (ecoBuff, sizeof(ecoBuff), "%d ppm", eco);
-        lv_label_set_text(ui_MinimalEco2Label, ecoBuff );
-        lv_arc_set_value(ui_MinimalEcoArc, eco);
+    //     char ecoBuff[20];
+    //     snprintf (ecoBuff, sizeof(ecoBuff), "%d ppm", eco);
+    //     lv_label_set_text(ui_MinimalEco2Label, ecoBuff );
+    //     lv_arc_set_value(ui_MinimalEcoArc, eco);
 
-        lv_arc_set_value(ui_MinimalTvocArc, tvoc );
+    //     lv_arc_set_value(ui_MinimalTvocArc, tvoc );
 
-        if (aqi >= 3) {
+    //     if (aqi >= 3) {
             
-        }
+    //     }
 
-        aqiLast = aqi;
+    //     aqiLast = aqi;
   
-    switch(aqi) {
-      case 1: 
-        lv_label_set_text(ui_MinimalTvocLabel, "Great");
-        break;
-      case 2: 
-        lv_label_set_text(ui_MinimalTvocLabel, "Good");
-        break;
-      case 3: 
-        lv_label_set_text(ui_MinimalTvocLabel, "Fair");
-        break;
-      case 4: 
-        lv_label_set_text(ui_MinimalTvocLabel, "Poor");
-        break;
-      case 5: 
-        lv_label_set_text(ui_MinimalTvocLabel, "Bad");
-        break;
-    }
+    // switch(aqi) {
+    //   case 1: 
+    //     lv_label_set_text(ui_MinimalTvocLabel, "Great");
+    //     break;
+    //   case 2: 
+    //     lv_label_set_text(ui_MinimalTvocLabel, "Good");
+    //     break;
+    //   case 3: 
+    //     lv_label_set_text(ui_MinimalTvocLabel, "Fair");
+    //     break;
+    //   case 4: 
+    //     lv_label_set_text(ui_MinimalTvocLabel, "Poor");
+    //     break;
+    //   case 5: 
+    //     lv_label_set_text(ui_MinimalTvocLabel, "Bad");
+    //     break;
+    // }
   }
 }

@@ -1,0 +1,25 @@
+{
+    "build": {
+      "mcu": "esp32s3",
+      "f_cpu": "240000000L",
+      "variant": "esp32s3",
+      "partitions": "default.csv",
+      "flash_mode": "qio",
+      "flash_size": "8MB",
+      "flash_freq": "80m"
+    },
+    "frameworks": ["arduino", "esp-idf"],
+    "name": "Custom ESP32-S3 Board",
+    "upload": {
+      "maximum_ram_size": 327680,
+      "maximum_size": 8388608,
+      "flash_size": "8MB",
+      "speed": 460800,
+      "protocol": "esptool",
+      "require_upload_port": true
+    },
+    "monitor": {
+      "speed": 115200
+    }
+  }
+  

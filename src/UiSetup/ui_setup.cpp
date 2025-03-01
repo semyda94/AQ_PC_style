@@ -39,8 +39,8 @@ void tft_ui_setup(void)
   String LVGL_Arduino = "Hello Arduino! ";
   LVGL_Arduino += String('V') + lv_version_major() + "." + lv_version_minor() + "." + lv_version_patch();
 
-  Serial.println( LVGL_Arduino );
-  Serial.println( "I am LVGL_Arduino" );
+  Serial1.println( LVGL_Arduino );
+  Serial1.println( "I am LVGL_Arduino" );
 
   lv_init();
 
@@ -68,10 +68,10 @@ void tft_ui_setup(void)
   // indev_drv.read_cb = my_touchpad_read;
   lv_indev_drv_register( &indev_drv );
     
-  Serial.println( "TFT Setup done" );
+  Serial1.println( "TFT Setup done" );
 
   /* Init SquareLine prepared UI */
   ui_init();
 
-  Serial.println( "UI Setup done" );
+  Serial1.println( "UI Setup done" );
 }

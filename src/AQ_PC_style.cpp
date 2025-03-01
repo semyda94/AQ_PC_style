@@ -8,7 +8,7 @@
 #include "actionControl/actionControl.h"
 
 //On Led
-int ArduinoLED = 38;
+int ArduinoLED = 18;
 
 /*--------------------------------------------------------------------------
   SETUP function
@@ -19,48 +19,54 @@ int ArduinoLED = 38;
 void setup() {
 
   //Switch on LED for init
-  // pinMode(ArduinoLED, OUTPUT);
-  // digitalWrite(ArduinoLED, LOW);
+  pinMode(ArduinoLED, OUTPUT);
+  digitalWrite(ArduinoLED, LOW);
 
   
-  Serial.begin(115200);
+  // Serial.begin(115200);
 
-  while (!Serial) {}
+  Serial1.begin(115200, SERIAL_8N1, 44, 43);  
+
+  // while (!Serial) {}
 
   char tempBuff[20];
+
+  // Serial.println("Loaded");
+
 
 
   // Below
 
-  // tft_ui_setup();
+  tft_ui_setup();
 
-  // setupActionButtons();
+  setupActionButtons();
 
-  // xTaskCreatePinnedToCore (
-  //   amimationLoop,     // Function to implement the task
-  //   "amimationLoop",   // Name of the task
-  //   4096*2,      // Stack size in words
-  //   NULL,      // Task input parameter
-  //   5,         // Priority of the task
-  //   NULL,      // Task handle.
-  //   0          // Core where the task should run
-  // );
+  delay(2000);
+  setupSensors();
 
-  // snprintf (tempBuff, sizeof(tempBuff), "Screen check");
-  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+  xTaskCreatePinnedToCore (
+    amimationLoop,     // Function to implement the task
+    "amimationLoop",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    5,         // Priority of the task
+    NULL,      // Task handle.
+    0          // Core where the task should run
+  );
 
-  // delay(2000);
-  // // setupSensors();
+  snprintf (tempBuff, sizeof(tempBuff), "Screen check");
+  lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
 
-  // snprintf (tempBuff, sizeof(tempBuff), "Sensors check");
-  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
 
-  // delay(2000);
+  snprintf (tempBuff, sizeof(tempBuff), "Sensors check");
+  lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
 
-  // snprintf (tempBuff, sizeof(tempBuff), "All good to go");
-  // lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+  delay(2000);
 
-  // delay(2000);
+  snprintf (tempBuff, sizeof(tempBuff), "All good to go");
+  lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+
+  delay(2000);
 
 
   // Above
@@ -70,27 +76,27 @@ void setup() {
   // wspConnect();
 
 
-  // xTaskCreatePinnedToCore (
-  //   sensorMeasurements,     // Function to implement the task
-  //   "sensorMeasurements",   // Name of the task
-  //   4096*2,      // Stack size in words
-  //   NULL,      // Task input parameter
-  //   6,         // Priority of the task
-  //   NULL,      // Task handle.
-  //   1          // Core where the task should run
-  // );
+  xTaskCreatePinnedToCore (
+    sensorMeasurements,     // Function to implement the task
+    "sensorMeasurements",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    6,         // Priority of the task
+    NULL,      // Task handle.
+    1          // Core where the task should run
+  );
 
   // ActiveScreen->SwitchScreen();
 
-  // xTaskCreatePinnedToCore (
-  //   actionControl,     // Function to implement the task
-  //   "actionControl",   // Name of the task
-  //   4096*2,      // Stack size in words
-  //   NULL,      // Task input parameter
-  //   8,         // Priority of the task
-  //   NULL,      // Task handle.
-  //   1          // Core where the task should run
-  // );
+  xTaskCreatePinnedToCore (
+    actionControl,     // Function to implement the task
+    "actionControl",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    8,         // Priority of the task
+    NULL,      // Task handle.
+    1          // Core where the task should run
+  );
 
 }
 
@@ -100,15 +106,15 @@ void setup() {
 
 
 void loop() {
-  // digitalWrite(ArduinoLED, HIGH);
+  digitalWrite(ArduinoLED, HIGH);
   
-  // delay(1000);
+  delay(2500);
 
-  // digitalWrite(ArduinoLED, LOW);
+  digitalWrite(ArduinoLED, LOW);
 
-  // delay(1000);
+  delay(2500);
 
-  Serial.println("Working .... Horray");
+  Serial1.println("Working .... Horray");
 
   // byte error, address;
   // int nDevices;
@@ -139,7 +145,7 @@ void loop() {
   // else {
   //   Serial.println("done\n");
   // }
-  delay(1000); 
+  // delay(1000); 
 }
   
 

@@ -13,24 +13,30 @@
 
 void setupSensors(void) 
 {
-    Serial.print("   wire created\n");
-    setupEns();
-    setupBme();
+  Serial1.println("========== BEGIN SENSORS SETUP ==========");
+    
+  setupEns();
+  setupBme();
 
-    // setupScd();
+  // setupScd();
 
-    // setupAht();
+  // setupAht();
+
+  Serial1.println("========== END SENSORS SETUP ==========");
 }
 
 void sensorMeasurements(void* pvParameters) 
 {
+    
   while (1) {
+    Serial1.println("========== BEGIN SENSORS MEASUREMENTS ==========");
 
     getAqiCo2();
     getTemperatureAndHumidity();
 
     // getAqi();
 
+    Serial1.println("========== END SENSORS MEASUREMENTS ==========");
     delay(5000);
   }
 }

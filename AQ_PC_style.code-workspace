@@ -32,7 +32,8 @@
 			"string": "cpp",
 			"string_view": "cpp",
 			"unordered_map": "cpp",
-			"unordered_set": "cpp"
+			"unordered_set": "cpp",
+			"ui_helpers.h": "c"
 		}
 	}
 }
