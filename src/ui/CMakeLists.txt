@@ -1,20 +1,14 @@
-SET(SOURCES screens/ui_LoadingScreen.c
-    screens/ui_DataScreen.c
+SET(SOURCES ui_LoadingScreen.c
+    ui_HomeScreen.c
     ui.c
-    components/ui_comp_hook.c
+    ui_comp_hook.c
     ui_helpers.c
-    ui_events.c
-    images/ui_img_retroboxicon1_png.c
-    images/ui_img_loadingbar_png.c
-    images/ui_img_loader_ind__1_png.c
-    images/ui_img_loader_ind_2_png.c
-    images/ui_img_loader_ind_3_png.c
-    images/ui_img_wallpaper_png.c
-    images/ui_img_datascreen_420_320_png.c
-    images/ui_img_settingsscreen_png.c
-    images/ui_img_network_connections_png.c
-    images/ui_img_appearence_png.c
-    images/ui_img_date_and_time_png.c
-    images/ui_img_networkconnectionsscreen_png.c)
+    ui_img_loadingscreenframe_png.c
+    ui_img_loadingbox1_png.c
+    ui_img_loadingbox2_png.c
+    ui_img_loadingbox3_png.c
+    ui_img_main_app_frame_png.c
+    ui_img_homeframe_png.c
+    ui_img_nextbutton_active_png.c)
 
 add_library(ui ${SOURCES})

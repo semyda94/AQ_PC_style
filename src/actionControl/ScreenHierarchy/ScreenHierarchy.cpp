@@ -10,6 +10,8 @@ Screen * LoadingScreen = new Screen();
 
 Screen * DataScreen = new Screen();
 
+Screen * HomeScreen = new Screen();
+
 Screen * SettingsScreen = new Screen();
 Element * NetworkConnectionsElement = new Element();
 Element * AppearanceElement = new Element();
@@ -120,9 +122,13 @@ void Element::Select() {
 
 void setupScreens()
 {
-    LoadingScreen->Init("LoadingScreen", DataScreen, ui_LoadingScreen, NULL);
+    LoadingScreen->Init("LoadingScreen", HomeScreen, ui_LoadingScreen, NULL);
 
-    DataScreen->Init("DataScreen", SettingsScreen, ui_Button1, NULL);
+    // DataScreen->Init("DataScreen", SettingsScreen, ui_Button1, NULL);
+
+    HomeScreen->Init("HomeScreen", HomeScreen, ui_HomeScreen, NULL);
+
+    //Frome Above
 
     // SettingsScreen->Init("SettingsScreen", DataScreen, ui_Button3, NetworkConnectionsElement);
     // NetworkConnectionsElement->Init(SettingsScreen, NetworkConnectionsScreen, "NetworkConnections", AppearanceElement, DateAndTimeElement, ui_NetworkConnectionsButton);

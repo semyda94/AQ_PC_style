@@ -2,8 +2,8 @@
 
 ///////////////////// VARIABLES DECLARATION ////////////////////
 
-// ScioSense_ENS160      ens160(ENS160_I2CADDR_1);
-ScioSense_ENS160      ens160(ENS160_I2CADDR_0);
+ScioSense_ENS160      ens160(ENS160_I2CADDR_1);
+//  ScioSense_ENS160      ens160(ENS160_I2CADDR_0);
 
 uint8_t aqiLast = 0;
 
@@ -16,26 +16,28 @@ void printStatus();
 
 void setupEns(void) 
 {
-  Serial1.println("========== BEGIN BME SENSOR (Air Quality) SETUP ==========");
+  Serial.println("========== BEGIN ENS SENSOR (Air Quality) SETUP ==========");
     
-  Serial1.println("Sensor readout in standard mode");
+  Serial.println("Sensor readout in standard mode");
   
   delay(1000);
 
-    Serial1.print("ENS160...");
+    Serial.print("ENS160...");
     // ens160.setI2C(40, 41);
     ens160.begin();
-    Serial1.println(ens160.available() ? "done." : "failed!");
+    Serial.println(ens160.available() ? "done." : "failed!");
 
     if (ens160.available()) {
         // Print ENS160 versions
-        Serial1.print("\tRev: "); Serial.print(ens160.getMajorRev());
-        Serial1.print("."); Serial.print(ens160.getMinorRev());
-        Serial1.print("."); Serial.println(ens160.getBuild());
+        Serial.print("\tRev: "); Serial.print(ens160.getMajorRev());
+        Serial.print("."); Serial.print(ens160.getMinorRev());
+        Serial.print("."); Serial.println(ens160.getBuild());
   
-        Serial1.print("\tStandard mode ");
-        Serial1.println(ens160.setMode(ENS160_OPMODE_STD) ? "done." : "failed!");
+        Serial.print("\tStandard mode ");
+        Serial.println(ens160.setMode(ENS160_OPMODE_STD) ? "done." : "failed!");
     }
+
+    Serial.println("========== END ENS SENSOR (Air Quality) SETUP ==========");
 }
 
 void getAqiCo2(void)
@@ -44,13 +46,13 @@ void getAqiCo2(void)
         ens160.measure(true);
         ens160.measureRaw(true);
   
-        Serial1.print("AQI: ");Serial1.print(ens160.getAQI());Serial1.print("\t");
-        Serial1.print("TVOC: ");Serial1.print(ens160.getTVOC());Serial1.print("ppb\t");
-        Serial1.print("eCO2: ");Serial1.print(ens160.geteCO2());Serial1.print("ppm\t");
-        Serial1.print("R HP0: ");Serial1.print(ens160.getHP0());Serial1.print("Ohm\t");
-        Serial1.print("R HP1: ");Serial1.print(ens160.getHP1());Serial1.print("Ohm\t");
-        Serial1.print("R HP2: ");Serial1.print(ens160.getHP2());Serial1.print("Ohm\t");
-        Serial1.print("R HP3: ");Serial1.print(ens160.getHP3());Serial1.println("Ohm");
+        Serial.print("AQI: ");Serial1.print(ens160.getAQI());Serial1.print("\t");
+        Serial.print("TVOC: ");Serial1.print(ens160.getTVOC());Serial1.print("ppb\t");
+        Serial.print("eCO2: ");Serial1.print(ens160.geteCO2());Serial1.print("ppm\t");
+        Serial.print("R HP0: ");Serial1.print(ens160.getHP0());Serial1.print("Ohm\t");
+        Serial.print("R HP1: ");Serial1.print(ens160.getHP1());Serial1.print("Ohm\t");
+        Serial.print("R HP2: ");Serial1.print(ens160.getHP2());Serial1.print("Ohm\t");
+        Serial.print("R HP3: ");Serial1.print(ens160.getHP3());Serial1.println("Ohm");
 
         uint8_t aqi = ens160.getAQI();
         uint16_t eco = ens160.geteCO2();

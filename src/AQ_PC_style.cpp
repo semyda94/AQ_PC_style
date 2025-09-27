@@ -23,15 +23,13 @@ void setup() {
   digitalWrite(ArduinoLED, LOW);
 
   
-  // Serial.begin(115200);
+  Serial.begin(115200);
 
-  Serial1.begin(115200, SERIAL_8N1, 44, 43);  
+  // Serial1.begin(115200, SERIAL_8N1, 44, 43);  
 
   // while (!Serial) {}
 
   char tempBuff[20];
-
-  // Serial.println("Loaded");
 
 
 
@@ -39,10 +37,9 @@ void setup() {
 
   tft_ui_setup();
 
-  setupActionButtons();
+  setupScreens();
 
-  delay(2000);
-  setupSensors();
+  // setupActionButtons();
 
   xTaskCreatePinnedToCore (
     amimationLoop,     // Function to implement the task
@@ -57,24 +54,18 @@ void setup() {
   snprintf (tempBuff, sizeof(tempBuff), "Screen check");
   lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
 
+  delay(2000);
 
   snprintf (tempBuff, sizeof(tempBuff), "Sensors check");
   lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
 
+  setupSensors();
+
+
   delay(2000);
 
-  snprintf (tempBuff, sizeof(tempBuff), "All good to go");
+  snprintf (tempBuff, sizeof(tempBuff), "All good to go!");
   lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
-
-  delay(2000);
-
-
-  // Above
-
-  // scan();
-
-  // wspConnect();
-
 
   xTaskCreatePinnedToCore (
     sensorMeasurements,     // Function to implement the task
@@ -86,17 +77,27 @@ void setup() {
     1          // Core where the task should run
   );
 
-  // ActiveScreen->SwitchScreen();
+  delay(2000);
 
-  xTaskCreatePinnedToCore (
-    actionControl,     // Function to implement the task
-    "actionControl",   // Name of the task
-    4096*2,      // Stack size in words
-    NULL,      // Task input parameter
-    8,         // Priority of the task
-    NULL,      // Task handle.
-    1          // Core where the task should run
-  );
+
+  // Above
+
+  // scan();
+
+  // wspConnect();
+
+
+  ActiveScreen->SwitchScreen();
+
+  // xTaskCreatePinnedToCore (
+  //   actionControl,     // Function to implement the task
+  //   "actionControl",   // Name of the task
+  //   4096*2,      // Stack size in words
+  //   NULL,      // Task input parameter
+  //   8,         // Priority of the task
+  //   NULL,      // Task handle.
+  //   1          // Core where the task should run
+  // );
 
 }
 
@@ -114,7 +115,7 @@ void loop() {
 
   delay(2500);
 
-  Serial1.println("Working .... Horray");
+  // Serial.println("Working .... Horray");
 
   // byte error, address;
   // int nDevices;
