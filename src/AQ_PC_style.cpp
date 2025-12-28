@@ -6,6 +6,8 @@
 #include "UiSetup/ui_setup.h"
 #include "sensors/sensors.h"
 #include "actionControl/actionControl.h"
+#include "actionControl/DateTimeControl/dateTimeControl.h"
+#include "actionControl/wifiControl/wifiControl.h"
 
 //On Led
 int ArduinoLED = 18;
@@ -39,7 +41,9 @@ void setup() {
 
   setupScreens();
 
-  // setupActionButtons();
+  setupActionButtons();
+
+  setupDateTime();
 
   xTaskCreatePinnedToCore (
     amimationLoop,     // Function to implement the task
@@ -61,8 +65,18 @@ void setup() {
 
   setupSensors();
 
+  delay(2000);
+
+
+  snprintf (tempBuff, sizeof(tempBuff), "Connecting WiFi");
+  lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
+
+  connectWifi();
+
 
   delay(2000);
+
+
 
   snprintf (tempBuff, sizeof(tempBuff), "All good to go!");
   lv_label_set_text(ui_LoadingStatusLabel, tempBuff );
@@ -70,6 +84,16 @@ void setup() {
   xTaskCreatePinnedToCore (
     sensorMeasurements,     // Function to implement the task
     "sensorMeasurements",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    6,         // Priority of the task
+    NULL,      // Task handle.
+    1          // Core where the task should run
+  );
+
+  xTaskCreatePinnedToCore (
+    dateTimeControl,     // Function to implement the task
+    "dateTimeControl",   // Name of the task
     4096*2,      // Stack size in words
     NULL,      // Task input parameter
     6,         // Priority of the task
@@ -89,15 +113,15 @@ void setup() {
 
   ActiveScreen->SwitchScreen();
 
-  // xTaskCreatePinnedToCore (
-  //   actionControl,     // Function to implement the task
-  //   "actionControl",   // Name of the task
-  //   4096*2,      // Stack size in words
-  //   NULL,      // Task input parameter
-  //   8,         // Priority of the task
-  //   NULL,      // Task handle.
-  //   1          // Core where the task should run
-  // );
+  xTaskCreatePinnedToCore (
+    actionControl,     // Function to implement the task
+    "actionControl",   // Name of the task
+    4096*2,      // Stack size in words
+    NULL,      // Task input parameter
+    8,         // Priority of the task
+    NULL,      // Task handle.
+    1          // Core where the task should run
+  );
 
 }
 

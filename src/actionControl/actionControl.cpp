@@ -32,7 +32,7 @@ void setupActionButtons(void)
 {
     setupScreens();
 
-    Serial1.println("========== BEGIN ACTION BUTTONS SETUP ==========");
+    Serial.println("========== BEGIN ACTION BUTTONS SETUP ==========");
 
     //Switch button
     pinMode(Button1Pin, INPUT_PULLUP);
@@ -40,13 +40,13 @@ void setupActionButtons(void)
     pinMode(Button3Pin, INPUT_PULLUP);
     pinMode(Button4Pin, INPUT_PULLUP);
 
-    Serial1.println("========== END ACTION BUTTONS SETUP ==========");
+    Serial.println("========== END ACTION BUTTONS SETUP ==========");
 }
 
 void actionControl(void* pvParameters) 
 {
     
-    Serial1.println("========== BEGIN ACTION CONTROL CYCLE ==========");
+    Serial.println("========== BEGIN ACTION CONTROL CYCLE ==========");
   while (1) {
 
     currentState1 = digitalRead(Button1Pin);
@@ -55,35 +55,35 @@ void actionControl(void* pvParameters)
     currentState4 = digitalRead(Button4Pin);
 
     if(lastState1 == LOW && currentState1 == HIGH)
-        Serial1.println("Button 1 Released");
+        Serial.println("Button 1 Released");
     if (lastState1 == HIGH && currentState1 == LOW) {
-        Serial1.println("Button 1 presed");
+        Serial.println("Button 1 presed");
         // ActiveScreen->SwitchScreen();
-        // // lv_event_send(ui_Button3, LV_EVENT_CLICKED, NULL);
+        lv_event_send(ui_TempHumNextButton, LV_EVENT_CLICKED, NULL);
         // // HideAqi_Animation(ui_Wallpaper, 0);
     }
 
     if(lastState2 == LOW && currentState2 == HIGH)
-        Serial1.println("Button 2 Released");
+        Serial.println("Button 2 Released");
     if (lastState2 == HIGH && currentState2 == LOW) {
-        Serial1.println("Button 2 presed");
+        Serial.println("Button 2 presed");
         // ActiveScreen->focusedElement->MoveToPrevious();
         // // lv_event_send(ui_NetworkConnectionsButton, LV_EVENT_FOCUSED, NULL);
         // // ShowAqi_Animation(ui_Wallpaper, 0);
     }
 
     if(lastState3 == LOW && currentState3 == HIGH)
-        Serial1.println("Button 3 Released");
+        Serial.println("Button 3 Released");
     if (lastState3 == HIGH && currentState3 == LOW) {
-        Serial1.println("Button 3 presed");
+        Serial.println("Button 3 presed");
         // ActiveScreen->focusedElement->MoveToNext();
         // // lv_event_send(ui_NetworkConnectionsButton, LV_EVENT_DEFOCUSED, NULL);
     }
 
     if(lastState4 == LOW && currentState4 == HIGH)
-        Serial1.println("Button 4 Released");
+        Serial.println("Button 4 Released");
     if (lastState4 == HIGH && currentState4 == LOW) {
-        Serial1.println("Button 4 presed");
+        Serial.println("Button 4 presed");
         // ActiveScreen->focusedElement->Select();
         // // lv_event_send(ui_Button1, LV_EVENT_CLICKED, NULL);
     }
@@ -97,5 +97,5 @@ void actionControl(void* pvParameters)
     delay(10);
   }
 
-  Serial1.println("========== END ACTION CONTROL CYCLE ==========");
+  Serial.println("========== END ACTION CONTROL CYCLE ==========");
 }

@@ -55,11 +55,11 @@ void getTemperatureAndHumidity(void)
   char tempBuff[20];
   snprintf (tempBuff, sizeof(tempBuff), "%.1f C", temp);
   lv_label_set_text(ui_HomeScreenTempLabel, tempBuff );
-  // lv_arc_set_value(ui_MinimalTemperatureArc, temp * 100);
+  lv_arc_set_value(ui_TemperatureArc, temp * 100);
 
   char humBuff[20];
   snprintf (humBuff, sizeof(humBuff), "%.1f %%", hum);
   lv_label_set_text(ui_HomeScreenHumLabel, humBuff );
-  // lv_arc_set_value(ui_MinimalHumidityArc, hum * 100 );
+  lv_arc_set_value(ui_HumidityArc, hum * 100 );
 
 }

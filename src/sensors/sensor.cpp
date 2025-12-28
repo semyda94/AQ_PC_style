@@ -2,7 +2,7 @@
 #include "aht/ahtAdafruit.h"
 #include "bme/bme.h"
 #include "ens/ens.h"
-#include "scd/scd.h"
+// #include "scd/scd.h"
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 

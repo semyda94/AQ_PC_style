@@ -8,9 +8,9 @@
 ///////////////////// VARIABLES DECLARATION ////////////////////
 Screen * LoadingScreen = new Screen();
 
-Screen * DataScreen = new Screen();
+Screen * TempHumScreen = new Screen();
 
-Screen * HomeScreen = new Screen();
+Screen * DateTimeScreen = new Screen();
 
 Screen * SettingsScreen = new Screen();
 Element * NetworkConnectionsElement = new Element();
@@ -122,12 +122,13 @@ void Element::Select() {
 
 void setupScreens()
 {
-    LoadingScreen->Init("LoadingScreen", HomeScreen, ui_LoadingScreen, NULL);
+    LoadingScreen->Init("LoadingScreen", TempHumScreen, ui_LoadingScreenSwitchToTempHumScreen, NULL);
 
     // DataScreen->Init("DataScreen", SettingsScreen, ui_Button1, NULL);
 
-    HomeScreen->Init("HomeScreen", HomeScreen, ui_HomeScreen, NULL);
+    TempHumScreen->Init("TempHumScreen", TempHumScreen, ui_TempHumNextButton, NULL);
 
+    DateTimeScreen->Init("DateTimeScreen", NULL, NULL, NULL);
     //Frome Above
 
     // SettingsScreen->Init("SettingsScreen", DataScreen, ui_Button3, NetworkConnectionsElement);

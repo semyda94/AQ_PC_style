@@ -1,15 +1,5 @@
 #include "wifiControl.h"
-#include "../../ui/ui.h"
-
-///////////////////// VARIABLES DECLARATION ////////////////////
-
-#define ESP_WPS_MODE     WPS_TYPE_PBC
-#define ESP_MANUFACTURER "ESPRESSIF"
-#define ESP_MODEL_NUMBER "ESP32"
-#define ESP_MODEL_NAME   "ESPRESSIF IOT"
-#define ESP_DEVICE_NAME  "ESP STATION"
-
-static esp_wps_config_t config;
+//#include "../../ui/ui.h"
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
@@ -18,7 +8,7 @@ static esp_wps_config_t config;
 
 //SKINNY-Y25TPG
 
-void scan(void*)
+void scan(void)
 {
     // Set WiFi to station mode and disconnect from an AP if it was previously connected
     // WiFi.mode(WIFI_STA);
@@ -55,77 +45,113 @@ void scan(void*)
     // Serial.println("scan ended");   
 }
 
-void wpsInitConfig() {
-  config.wps_type = ESP_WPS_MODE;
-  strcpy(config.factory_info.manufacturer, ESP_MANUFACTURER);
-  strcpy(config.factory_info.model_number, ESP_MODEL_NUMBER);
-  strcpy(config.factory_info.model_name, ESP_MODEL_NAME);
-  strcpy(config.factory_info.device_name, ESP_DEVICE_NAME);
+void get_device_id() {
+  Serial.println("========== BEGIN Get Device Id ==========");
+  uint64_t mac = ESP.getEfuseMac(); // 48-bit base MAC
+  char id[17];
+
+  // Format as hex string (12 chars)
+  snprintf(id, sizeof(id), "%04X%08X",
+           (uint16_t)(mac >> 32),
+           (uint32_t)mac);
+
+  Serial.print("Device ID: ");
+  Serial.println(id);
+  Serial.println("========== END Get Device Id ==========");
 }
 
-void wpsStart() {
-  if (esp_wifi_wps_enable(&config)) {
-    Serial.println("WPS Enable Failed");
-  } else if (esp_wifi_wps_start(0)) {
-    Serial.println("WPS Start Failed");
-  }
+
+String https_get_device_id() {
+  Serial.println("========== BEGIN Get Device Id ==========");
+
+  WiFiClientSecure client;
+  client.setInsecure(); // ⚠️ no TLS verification
+
+  HTTPClient https;
+  if (!https.begin(client, "https://aqpcserverside-hfcgh9cmcxhvdjbu.newzealandnorth-01.azurewebsites.net/api/device/1?code=")) return "ERR: begin failed";
+
+  https.addHeader("Accept", "application/json");
+
+  int httpCode = https.GET();
+  String payload = (httpCode > 0) ? https.getString() : ("ERR: GET failed code=" + String(httpCode));
+
+  https.end();
+
+  Serial.println(payload);
+
+  Serial.println("========== END Get Device Id ==========");
+  return payload;
 }
 
-void wpsStop() {
-  if (esp_wifi_wps_disable()) {
-    Serial.println("WPS Disable Failed");
-  }
+String https_post_create_measurements(
+  float co2 = 0.0f,
+  float temperature = 0.0f,
+  float humidity = 0.0f
+) {
+  Serial.println("========== BEGIN Post Create Measurements ==========");
+
+  WiFiClientSecure client;
+  client.setInsecure(); 
+
+  HTTPClient https;
+  if (!https.begin(client, "https://aqpcserverside-hfcgh9cmcxhvdjbu.newzealandnorth-01.azurewebsites.net/api/measurement?code=")) return "ERR: begin failed";
+
+  https.addHeader("Content-Type", "application/json");
+  https.addHeader("Accept", "application/json");
+
+  String body;
+  body.reserve(256); // avoid heap fragmentation
+  body += "{";
+  body += "\"DeviceId\":1,";
+  body += "\"Measurements\":[";
+  body += "{\"MeasurementType\":\"CO2\",\"MeasurementValue\":" + String(co2, 2) + "},";
+  body += "{\"MeasurementType\":\"Temperature\",\"MeasurementValue\":" + String(temperature, 2) + "},";
+  body += "{\"MeasurementType\":\"Humidity\",\"MeasurementValue\":" + String(humidity, 2) + "}";
+  body += "]}";
+  Serial.print("Body: "); Serial.println(body);
+  Serial.print("Body length: "); Serial.println(body.length());
+
+  int httpCode = https.POST((uint8_t*)body.c_str(), body.length());
+  String payload = (httpCode > 0) ? https.getString() : ("ERR: POST failed code=" + String(httpCode));
+
+  https.end();
+
+  Serial.print("HTTP code: "); Serial.println(httpCode);
+  Serial.println("Response:");
+  Serial.println(payload);
+
+  Serial.println("========== END Post Create Measurements ==========");
+  return payload;
 }
 
-String wpspin2string(uint8_t a[]) {
-  char wps_pin[9];
-  for (int i = 0; i < 8; i++) {
-    wps_pin[i] = a[i];
-  }
-  wps_pin[8] = '\0';
-  return (String)wps_pin;
-}
-
-// WARNING: WiFiEvent is called from a separate FreeRTOS task (thread)!
-void WiFiEvent(WiFiEvent_t event, arduino_event_info_t info) {
-  switch (event) {
-    case ARDUINO_EVENT_WIFI_STA_START: Serial.println("Station Mode Started"); break;
-    case ARDUINO_EVENT_WIFI_STA_GOT_IP:
-      Serial.println("Connected to :" + String(WiFi.SSID()));
-      Serial.print("Got IP: ");
-      Serial.println(WiFi.localIP());
-      break;
-    case ARDUINO_EVENT_WIFI_STA_DISCONNECTED:
-      Serial.println("Disconnected from station, attempting reconnection");
-      WiFi.reconnect();
-      break;
-    case ARDUINO_EVENT_WPS_ER_SUCCESS:
-      Serial.println("WPS Successful, stopping WPS and connecting to: " + String(WiFi.SSID()));
-      wpsStop();
-      delay(10);
-      WiFi.begin();
-      break;
-    case ARDUINO_EVENT_WPS_ER_FAILED:
-      Serial.println("WPS Failed, retrying");
-      wpsStop();
-      wpsStart();
-      break;
-    case ARDUINO_EVENT_WPS_ER_TIMEOUT:
-      Serial.println("WPS Timedout, retrying");
-      wpsStop();
-      wpsStart();
-      break;
-    case ARDUINO_EVENT_WPS_ER_PIN: Serial.println("WPS_PIN = " + wpspin2string(info.wps_er_pin.pin_code)); break;
-    default:                       break;
-  }
-}
-
-void wspConnect(void)
+void connectWifi(void)
 {
-    WiFi.onEvent(WiFiEvent);  // Will call WiFiEvent() from another thread.
-    WiFi.mode(WIFI_MODE_STA);
-    Serial.println("Starting WPS");
-    wpsInitConfig();
-    wpsStart();
+  Serial.println("========== BEGIN WIFI SETUP ==========");
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin("SKINNY-Y25TPG", "");
+
+  Serial.print("Connecting to WiFi");
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(400);
+    Serial.print(".");
+  }
+
+  Serial.println();
+  Serial.print("WiFi connected, IP: ");
+  Serial.println(WiFi.localIP());
+
+  get_device_id();
+
+  // https_get_device_id();
+  
+  //https_post_create_measurements();
+
+  Serial.println("========== END WIFI SETUP ==========");
 }
+//    WiFi.onEvent(WiFiEvent);  // Will call WiFiEvent() from another thread.
+//    WiFi.mode(WIFI_MODE_STA);
+//    Serial.println("Starting WPS");
+//    wpsInitConfig();
+//    wpsStart();
 
