@@ -22,6 +22,7 @@ extern lv_obj_t *ui_DateTimeScreenHomeTab;
 extern lv_obj_t *ui_DateTimeScreenSettingsTab;
 extern lv_obj_t *ui_DateTimeScreenDateTimeTab;
 extern lv_obj_t *ui_DateTimeScreenMonthLabel;
+extern lv_obj_t *ui_DateTimeScreenCalendarContainer;
 extern lv_obj_t *ui_DateTimeScreenYearLabel;
 extern lv_obj_t *ui_DateTimeScreenButtons;
 extern lv_obj_t *ui_DateTimeScreenNextButton;

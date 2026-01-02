@@ -1,16 +1,16 @@
 #include "dateTimeControl.h"
 #include "../../ui/ui.h"
+#include <ui/ui_custom/calendar_table.h>
+#include <ui/ui_custom/ui_custom_init.h>
 
 #include <time.h>
 #include <Arduino.h>
+#include "RTClib.h"
 
+RTC_DS3231 rtc;
 
 ///////////////////// VARIABLES DECLARATION ////////////////////
 
-static const char* months[] = {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    };
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
@@ -20,24 +20,37 @@ void clock_set_time(int hour, int minute);
 
 ///////////////////// FUNCTIONS IMPLEMENTATION ////////////////////
 
+void printDateTime(const DateTime& dt) {
+  char buf[32];
+  snprintf(buf, sizeof(buf),
+           "%04d-%02d-%02d %02d:%02d:%02d",
+           dt.year(), dt.month(), dt.day(),
+           dt.hour(), dt.minute(), dt.second());
+  Serial.println(buf);
+}
+
 void setupDateTime(void)
 {
     Serial.println("========== BEGIN DATE TIME SETUP ==========");
 
-    struct tm timeinfo;
+    // Init RTC
+    if (!rtc.begin()) {
+        Serial.println("ERROR: DS3231 not found");
+        while (true) delay(1000);
+    }
 
-    timeinfo.tm_year = 2025 - 1900;
-    timeinfo.tm_mon  = 6 - 1;
-    timeinfo.tm_mday = 15;
-    timeinfo.tm_hour = 12;
-    timeinfo.tm_min  = 0;
-    timeinfo.tm_sec  = 0;
+    if (rtc.lostPower()) {
+        Serial.println("RTC lost power, setting time from compile time");
+        rtc.adjust(DateTime(F(__DATE__), F(__TIME__)));
+    }
 
-    time_t epoch = mktime(&timeinfo);
+    DateTime now = rtc.now();
+    Serial.print("Current RTC time: ");
+    printDateTime(now);
 
-    // Set system time
-    timeval tv = { .tv_sec = epoch, .tv_usec = 0 };
-    settimeofday(&tv, nullptr);
+    clock_set_time(now.hour(), now.minute());
+    calendar_table_set_month(g_calendar_table, now.year(), now.month(), now.day());
+
 
     Serial.println("========== END DATE TIME SETUP ==========");
 }
@@ -47,73 +60,34 @@ void dateTimeControl(void* pvParameters)
     
     Serial.println("========== BEGIN DATE TIME CYCLE ==========");
 
+    uint8_t lastDayChecked = -1;
 
-  while (1) {
+    while (1) {
 
-    static uint32_t lastCheck = -1;
+        DateTime now = rtc.now();
 
-    if (millis() - lastCheck > 60000)  {
-      lastCheck = millis();
-
-      struct tm now;
-        if (getLocalTime(&now)) {
+        if (now.second() == 0)  {
             Serial.printf("Date: %04d-%02d-%02d  Time: %02d:%02d:%02d\n",
-                          now.tm_year + 1900,
-                          now.tm_mon + 1,
-                          now.tm_mday,
-                          now.tm_hour,
-                          now.tm_min,
-                          now.tm_sec);
+                          now.year(),
+                          now.month(),
+                          now.day(),
+                          now.hour(),
+                          now.minute(),
+                          now.second());
 
-            clock_set_time(now.tm_hour, now.tm_min);
+            clock_set_time(now.hour(), now.minute());
 
-            char timeBuff[20];
-            snprintf (timeBuff, sizeof(timeBuff), "%02d:%02d", now.tm_hour, now.tm_min);
-            lv_label_set_text(ui_DateTimeScreenTimeLabel, timeBuff );
 
-            char yearBuff[20];
-            snprintf (yearBuff, sizeof(yearBuff), "%04d", now.tm_year + 1900);
-            lv_label_set_text(ui_DateTimeScreenYearLabel, yearBuff );
-
-            lv_label_set_text(ui_DateTimeScreenMonthLabel, months[now.tm_mon] );
-
-        } else {
-            Serial.println("Failed to get time (not set?)");
-        }
-
+            if (now.day() != lastDayChecked) {
+                Serial.println("Updating calendar table for new day...");
+                
+                lastDayChecked = now.day();
+                calendar_table_set_month(g_calendar_table, now.year(), now.month(), now.day());
+            }
     }
     
-    delay(500);
+    delay(1000);
   }
 
   Serial.println("========== END DATE TIME CYCLE ==========");
-}
-
-const char* monthToShortName(int tm_mon)
-{
-    static const char* months[] = {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    };
-
-    if (tm_mon < 0 || tm_mon > 11) return "???";
-    return months[tm_mon];
-}
-
-void clock_set_time(int hour, int minute)
-{
-    // degrees
-    float min_deg  = minute * 6.0f;       // optional smooth
-    float hour_deg = (hour % 12) * 30.0f + minute * 0.5f; // smooth hour
-
-    // LVGL often uses 0.1 degree units:
-    int16_t min10  = (int16_t)(min_deg * 10);
-    int16_t hour10 = (int16_t)(hour_deg * 10);
-
-    // set pivot once (do it at init)
-    // lv_img_set_pivot(ui_min_hand, pivot_x, pivot_y);
-    // lv_img_set_pivot(ui_hour_hand, pivot_x, pivot_y);
-
-    lv_img_set_angle(ui_MinuteArrow,  min10);
-    lv_img_set_angle(ui_HourArrow, hour10);
 }

@@ -5,7 +5,7 @@
 
 #include "ui.h"
 
-lv_obj_t *ui_DateTimeScreen = NULL;lv_obj_t *ui_DateTimeScreenBg = NULL;lv_obj_t *ui_DateTimeScreenMainAppFrame = NULL;lv_obj_t *ui_DateTimeScreenMainAppImg = NULL;lv_obj_t *ui_DateTimeScreenTabs = NULL;lv_obj_t *ui_DateTimeScreenHomeTab = NULL;lv_obj_t *ui_DateTimeScreenSettingsTab = NULL;lv_obj_t *ui_DateTimeScreenDateTimeTab = NULL;lv_obj_t *ui_DateTimeScreenMonthLabel = NULL;lv_obj_t *ui_DateTimeScreenYearLabel = NULL;lv_obj_t *ui_DateTimeScreenButtons = NULL;lv_obj_t *ui_DateTimeScreenNextButton = NULL;lv_obj_t *ui_DateTimeScreenPreviousButton = NULL;lv_obj_t *ui_DateTimeScreenTimeLabel = NULL;lv_obj_t *ui_HoursContainer = NULL;lv_obj_t *ui_MinuteArrow = NULL;lv_obj_t *ui_HourArrow = NULL;
+lv_obj_t *ui_DateTimeScreen = NULL;lv_obj_t *ui_DateTimeScreenBg = NULL;lv_obj_t *ui_DateTimeScreenMainAppFrame = NULL;lv_obj_t *ui_DateTimeScreenMainAppImg = NULL;lv_obj_t *ui_DateTimeScreenTabs = NULL;lv_obj_t *ui_DateTimeScreenHomeTab = NULL;lv_obj_t *ui_DateTimeScreenSettingsTab = NULL;lv_obj_t *ui_DateTimeScreenDateTimeTab = NULL;lv_obj_t *ui_DateTimeScreenMonthLabel = NULL;lv_obj_t *ui_DateTimeScreenCalendarContainer = NULL;lv_obj_t *ui_DateTimeScreenYearLabel = NULL;lv_obj_t *ui_DateTimeScreenButtons = NULL;lv_obj_t *ui_DateTimeScreenNextButton = NULL;lv_obj_t *ui_DateTimeScreenPreviousButton = NULL;lv_obj_t *ui_DateTimeScreenTimeLabel = NULL;lv_obj_t *ui_HoursContainer = NULL;lv_obj_t *ui_MinuteArrow = NULL;lv_obj_t *ui_HourArrow = NULL;
 // event funtions
 void ui_event_DateTimeScreenPreviousButton( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -95,6 +95,15 @@ lv_obj_set_align( ui_DateTimeScreenMonthLabel, LV_ALIGN_CENTER );
 lv_label_set_text(ui_DateTimeScreenMonthLabel,"Dec");
 lv_obj_set_style_text_align(ui_DateTimeScreenMonthLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_DateTimeScreenMonthLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_DateTimeScreenCalendarContainer = lv_obj_create(ui_DateTimeScreenMainAppFrame);
+lv_obj_remove_style_all(ui_DateTimeScreenCalendarContainer);
+lv_obj_set_width( ui_DateTimeScreenCalendarContainer, 122);
+lv_obj_set_height( ui_DateTimeScreenCalendarContainer, 98);
+lv_obj_set_x( ui_DateTimeScreenCalendarContainer, -73 );
+lv_obj_set_y( ui_DateTimeScreenCalendarContainer, 22 );
+lv_obj_set_align( ui_DateTimeScreenCalendarContainer, LV_ALIGN_CENTER );
+lv_obj_clear_flag( ui_DateTimeScreenCalendarContainer, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 
 ui_DateTimeScreenYearLabel = lv_label_create(ui_DateTimeScreenMainAppFrame);
 lv_obj_set_width( ui_DateTimeScreenYearLabel, 53);
@@ -191,6 +200,7 @@ ui_DateTimeScreenHomeTab= NULL;
 ui_DateTimeScreenSettingsTab= NULL;
 ui_DateTimeScreenDateTimeTab= NULL;
 ui_DateTimeScreenMonthLabel= NULL;
+ui_DateTimeScreenCalendarContainer= NULL;
 ui_DateTimeScreenYearLabel= NULL;
 ui_DateTimeScreenButtons= NULL;
 ui_DateTimeScreenNextButton= NULL;

@@ -5,6 +5,7 @@
 
 #include "ui.h"
 #include "ui_helpers.h"
+#include "ui_custom/ui_custom_init.h"
 
 ///////////////////// VARIABLES ////////////////////
 lv_anim_t * LoadingBar_Animation( lv_obj_t *TargetObject, int delay);
@@ -61,6 +62,9 @@ lv_disp_set_theme(dispp, theme);
 ui_LoadingScreen_screen_init();
 ui_TempHumScreen_screen_init();
 ui_DateTimeScreen_screen_init();
+
+ui_custom_init();
+
 ui____initial_actions0 = lv_obj_create(NULL);
 lv_disp_load_scr( ui_LoadingScreen);
 }
