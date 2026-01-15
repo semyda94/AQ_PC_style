@@ -5,7 +5,7 @@
 
 #include "ui.h"
 
-lv_obj_t *ui_LoadingScreen = NULL;lv_obj_t *ui_LoadingScreenBg = NULL;lv_obj_t *ui_LoadingBox1 = NULL;lv_obj_t *ui_LoadingBox2 = NULL;lv_obj_t *ui_LoadingBox3 = NULL;lv_obj_t *ui_LoadingStatusLabel = NULL;lv_obj_t *ui_LoadingScreenSwitchToTempHumScreen = NULL;
+lv_obj_t *ui_LoadingScreen = NULL;lv_obj_t *ui_LoadingScreenBg = NULL;lv_obj_t *ui_LoadingBox1 = NULL;lv_obj_t *ui_LoadingBox2 = NULL;lv_obj_t *ui_LoadingBox3 = NULL;lv_obj_t *ui_LoadingStatusLabel = NULL;lv_obj_t *ui_InitialDateTimeSetup = NULL;lv_obj_t *ui_LoadingScreenInitialDateSetupActions = NULL;lv_obj_t *ui_LoadingScreenInitialSetupImage = NULL;lv_obj_t *ui_LoadingScreenInitialSetupYearLabel = NULL;lv_obj_t *ui_LoadingScreenInitialSetupMonthLabel = NULL;lv_obj_t *ui_LoadingScreenInitialSetupDayLabel = NULL;lv_obj_t *ui_LoadingScreenInitialSetupHoursLabel = NULL;lv_obj_t *ui_LoadingScreenInitialSetupMinutesLabel = NULL;lv_obj_t *ui_LoadingScreenSwitchToTempHumScreen = NULL;lv_obj_t *ui_InitialNetworkSetup = NULL;lv_obj_t *ui_LoadingScreenInitialNetworkSetupActions = NULL;lv_obj_t *ui_LoadingScreenInitialWifiSetupImage = NULL;
 // event funtions
 void ui_event_LoadingScreen( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
@@ -17,11 +17,33 @@ if ( event_code == LV_EVENT_SCREEN_LOADED) {
 }
 }
 
+void ui_event_LoadingScreenInitialDateSetupActions( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_FOCUSED) {
+      _ui_basic_set_property(ui_InitialDateTimeSetup, _UI_BASIC_PROPERTY_POSITION_X,  0);
+}
+if ( event_code == LV_EVENT_DEFOCUSED) {
+      _ui_basic_set_property(ui_InitialDateTimeSetup, _UI_BASIC_PROPERTY_POSITION_X,  -480);
+}
+}
+
 void ui_event_LoadingScreenSwitchToTempHumScreen( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
 if ( event_code == LV_EVENT_CLICKED) {
       _ui_screen_change( &ui_TempHumScreen, LV_SCR_LOAD_ANIM_FADE_ON, 500, 0, &ui_TempHumScreen_screen_init);
+}
+}
+
+void ui_event_LoadingScreenInitialNetworkSetupActions( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_FOCUSED) {
+      _ui_basic_set_property(ui_InitialNetworkSetup, _UI_BASIC_PROPERTY_POSITION_X,  0);
+}
+if ( event_code == LV_EVENT_DEFOCUSED) {
+      _ui_basic_set_property(ui_InitialNetworkSetup, _UI_BASIC_PROPERTY_POSITION_X,  -480);
 }
 }
 
@@ -82,6 +104,121 @@ lv_obj_set_style_text_opa(ui_LoadingStatusLabel, 255, LV_PART_MAIN| LV_STATE_DEF
 lv_obj_set_style_text_align(ui_LoadingStatusLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
 lv_obj_set_style_text_font(ui_LoadingStatusLabel, &lv_font_montserrat_24, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_InitialDateTimeSetup = lv_obj_create(ui_LoadingScreen);
+lv_obj_remove_style_all(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_InitialDateTimeSetup, 480);
+lv_obj_set_height( ui_InitialDateTimeSetup, 320);
+lv_obj_set_x( ui_InitialDateTimeSetup, -480 );
+lv_obj_set_y( ui_InitialDateTimeSetup, 0 );
+lv_obj_set_align( ui_InitialDateTimeSetup, LV_ALIGN_CENTER );
+lv_obj_add_state( ui_InitialDateTimeSetup, LV_STATE_FOCUSED );     /// States
+lv_obj_clear_flag( ui_InitialDateTimeSetup, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+
+ui_LoadingScreenInitialDateSetupActions = lv_btn_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialDateSetupActions, 100);
+lv_obj_set_height( ui_LoadingScreenInitialDateSetupActions, 303);
+lv_obj_set_x( ui_LoadingScreenInitialDateSetupActions, -180 );
+lv_obj_set_y( ui_LoadingScreenInitialDateSetupActions, -4 );
+lv_obj_set_align( ui_LoadingScreenInitialDateSetupActions, LV_ALIGN_CENTER );
+lv_obj_add_state( ui_LoadingScreenInitialDateSetupActions, LV_STATE_USER_1 | LV_STATE_USER_3 );     /// States
+lv_obj_add_flag( ui_LoadingScreenInitialDateSetupActions, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_clear_flag( ui_LoadingScreenInitialDateSetupActions, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialDateSetupActions, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialDateSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_color(ui_LoadingScreenInitialDateSetupActions, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_LoadingScreenInitialDateSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_shadow_color(ui_LoadingScreenInitialDateSetupActions, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_shadow_opa(ui_LoadingScreenInitialDateSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_LoadingScreenInitialSetupImage = lv_img_create(ui_InitialDateTimeSetup);
+lv_img_set_src(ui_LoadingScreenInitialSetupImage, &ui_img_datetimesettings_png);
+lv_obj_set_width( ui_LoadingScreenInitialSetupImage, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_LoadingScreenInitialSetupImage, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_LoadingScreenInitialSetupImage, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_LoadingScreenInitialSetupImage, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
+lv_obj_clear_flag( ui_LoadingScreenInitialSetupImage, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+
+ui_LoadingScreenInitialSetupYearLabel = lv_label_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialSetupYearLabel, 82);
+lv_obj_set_height( ui_LoadingScreenInitialSetupYearLabel, 19);
+lv_obj_set_x( ui_LoadingScreenInitialSetupYearLabel, -101 );
+lv_obj_set_y( ui_LoadingScreenInitialSetupYearLabel, -6 );
+lv_obj_set_align( ui_LoadingScreenInitialSetupYearLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_LoadingScreenInitialSetupYearLabel,"Test");
+lv_obj_add_state( ui_LoadingScreenInitialSetupYearLabel, LV_STATE_FOCUSED );     /// States
+lv_obj_set_style_text_align(ui_LoadingScreenInitialSetupYearLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupYearLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_color(ui_LoadingScreenInitialSetupYearLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_text_opa(ui_LoadingScreenInitialSetupYearLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupYearLabel, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_radius(ui_LoadingScreenInitialSetupYearLabel, 2, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialSetupYearLabel, lv_color_hex(0x306AC3), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialSetupYearLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+
+ui_LoadingScreenInitialSetupMonthLabel = lv_label_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialSetupMonthLabel, 82);
+lv_obj_set_height( ui_LoadingScreenInitialSetupMonthLabel, 19);
+lv_obj_set_x( ui_LoadingScreenInitialSetupMonthLabel, 0 );
+lv_obj_set_y( ui_LoadingScreenInitialSetupMonthLabel, -6 );
+lv_obj_set_align( ui_LoadingScreenInitialSetupMonthLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_LoadingScreenInitialSetupMonthLabel,"Test");
+lv_obj_set_style_text_align(ui_LoadingScreenInitialSetupMonthLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupMonthLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_color(ui_LoadingScreenInitialSetupMonthLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_text_opa(ui_LoadingScreenInitialSetupMonthLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupMonthLabel, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_radius(ui_LoadingScreenInitialSetupMonthLabel, 2, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialSetupMonthLabel, lv_color_hex(0x306AC3), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialSetupMonthLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+
+ui_LoadingScreenInitialSetupDayLabel = lv_label_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialSetupDayLabel, 82);
+lv_obj_set_height( ui_LoadingScreenInitialSetupDayLabel, 19);
+lv_obj_set_x( ui_LoadingScreenInitialSetupDayLabel, 101 );
+lv_obj_set_y( ui_LoadingScreenInitialSetupDayLabel, -6 );
+lv_obj_set_align( ui_LoadingScreenInitialSetupDayLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_LoadingScreenInitialSetupDayLabel,"Test");
+lv_obj_set_style_text_align(ui_LoadingScreenInitialSetupDayLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupDayLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_color(ui_LoadingScreenInitialSetupDayLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_text_opa(ui_LoadingScreenInitialSetupDayLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupDayLabel, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_radius(ui_LoadingScreenInitialSetupDayLabel, 2, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialSetupDayLabel, lv_color_hex(0x306AC3), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialSetupDayLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+
+ui_LoadingScreenInitialSetupHoursLabel = lv_label_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialSetupHoursLabel, 82);
+lv_obj_set_height( ui_LoadingScreenInitialSetupHoursLabel, 19);
+lv_obj_set_x( ui_LoadingScreenInitialSetupHoursLabel, -51 );
+lv_obj_set_y( ui_LoadingScreenInitialSetupHoursLabel, 50 );
+lv_obj_set_align( ui_LoadingScreenInitialSetupHoursLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_LoadingScreenInitialSetupHoursLabel,"Test");
+lv_obj_set_style_text_align(ui_LoadingScreenInitialSetupHoursLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupHoursLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_color(ui_LoadingScreenInitialSetupHoursLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_text_opa(ui_LoadingScreenInitialSetupHoursLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupHoursLabel, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_radius(ui_LoadingScreenInitialSetupHoursLabel, 2, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialSetupHoursLabel, lv_color_hex(0x306AC3), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialSetupHoursLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+
+ui_LoadingScreenInitialSetupMinutesLabel = lv_label_create(ui_InitialDateTimeSetup);
+lv_obj_set_width( ui_LoadingScreenInitialSetupMinutesLabel, 82);
+lv_obj_set_height( ui_LoadingScreenInitialSetupMinutesLabel, 19);
+lv_obj_set_x( ui_LoadingScreenInitialSetupMinutesLabel, 51 );
+lv_obj_set_y( ui_LoadingScreenInitialSetupMinutesLabel, 50 );
+lv_obj_set_align( ui_LoadingScreenInitialSetupMinutesLabel, LV_ALIGN_CENTER );
+lv_label_set_text(ui_LoadingScreenInitialSetupMinutesLabel,"Test");
+lv_obj_set_style_text_align(ui_LoadingScreenInitialSetupMinutesLabel, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupMinutesLabel, &lv_font_montserrat_14, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_text_color(ui_LoadingScreenInitialSetupMinutesLabel, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_text_opa(ui_LoadingScreenInitialSetupMinutesLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_text_font(ui_LoadingScreenInitialSetupMinutesLabel, &lv_font_montserrat_16, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_radius(ui_LoadingScreenInitialSetupMinutesLabel, 2, LV_PART_MAIN| LV_STATE_FOCUSED);
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialSetupMinutesLabel, lv_color_hex(0x306AC3), LV_PART_MAIN | LV_STATE_FOCUSED );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialSetupMinutesLabel, 255, LV_PART_MAIN| LV_STATE_FOCUSED);
+
 ui_LoadingScreenSwitchToTempHumScreen = lv_btn_create(ui_LoadingScreen);
 lv_obj_set_width( ui_LoadingScreenSwitchToTempHumScreen, 100);
 lv_obj_set_height( ui_LoadingScreenSwitchToTempHumScreen, 303);
@@ -97,7 +234,43 @@ lv_obj_set_style_border_opa(ui_LoadingScreenSwitchToTempHumScreen, 0, LV_PART_MA
 lv_obj_set_style_shadow_color(ui_LoadingScreenSwitchToTempHumScreen, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
 lv_obj_set_style_shadow_opa(ui_LoadingScreenSwitchToTempHumScreen, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
 
+ui_InitialNetworkSetup = lv_obj_create(ui_LoadingScreen);
+lv_obj_remove_style_all(ui_InitialNetworkSetup);
+lv_obj_set_width( ui_InitialNetworkSetup, 480);
+lv_obj_set_height( ui_InitialNetworkSetup, 320);
+lv_obj_set_x( ui_InitialNetworkSetup, -480 );
+lv_obj_set_y( ui_InitialNetworkSetup, 0 );
+lv_obj_set_align( ui_InitialNetworkSetup, LV_ALIGN_CENTER );
+lv_obj_add_state( ui_InitialNetworkSetup, LV_STATE_FOCUSED | LV_STATE_USER_1 );     /// States
+lv_obj_clear_flag( ui_InitialNetworkSetup, LV_OBJ_FLAG_CLICKABLE | LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+
+ui_LoadingScreenInitialNetworkSetupActions = lv_btn_create(ui_InitialNetworkSetup);
+lv_obj_set_width( ui_LoadingScreenInitialNetworkSetupActions, 100);
+lv_obj_set_height( ui_LoadingScreenInitialNetworkSetupActions, 303);
+lv_obj_set_x( ui_LoadingScreenInitialNetworkSetupActions, -180 );
+lv_obj_set_y( ui_LoadingScreenInitialNetworkSetupActions, -4 );
+lv_obj_set_align( ui_LoadingScreenInitialNetworkSetupActions, LV_ALIGN_CENTER );
+lv_obj_add_state( ui_LoadingScreenInitialNetworkSetupActions, LV_STATE_USER_1 );     /// States
+lv_obj_add_flag( ui_LoadingScreenInitialNetworkSetupActions, LV_OBJ_FLAG_SCROLL_ON_FOCUS );   /// Flags
+lv_obj_clear_flag( ui_LoadingScreenInitialNetworkSetupActions, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+lv_obj_set_style_bg_color(ui_LoadingScreenInitialNetworkSetupActions, lv_color_hex(0xFFFFFF), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_bg_opa(ui_LoadingScreenInitialNetworkSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_border_color(ui_LoadingScreenInitialNetworkSetupActions, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_border_opa(ui_LoadingScreenInitialNetworkSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+lv_obj_set_style_shadow_color(ui_LoadingScreenInitialNetworkSetupActions, lv_color_hex(0x000000), LV_PART_MAIN | LV_STATE_DEFAULT );
+lv_obj_set_style_shadow_opa(ui_LoadingScreenInitialNetworkSetupActions, 0, LV_PART_MAIN| LV_STATE_DEFAULT);
+
+ui_LoadingScreenInitialWifiSetupImage = lv_img_create(ui_InitialNetworkSetup);
+lv_img_set_src(ui_LoadingScreenInitialWifiSetupImage, &ui_img_initialnetworksetting_png);
+lv_obj_set_width( ui_LoadingScreenInitialWifiSetupImage, LV_SIZE_CONTENT);  /// 1
+lv_obj_set_height( ui_LoadingScreenInitialWifiSetupImage, LV_SIZE_CONTENT);   /// 1
+lv_obj_set_align( ui_LoadingScreenInitialWifiSetupImage, LV_ALIGN_CENTER );
+lv_obj_add_flag( ui_LoadingScreenInitialWifiSetupImage, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
+lv_obj_clear_flag( ui_LoadingScreenInitialWifiSetupImage, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
+
+lv_obj_add_event_cb(ui_LoadingScreenInitialDateSetupActions, ui_event_LoadingScreenInitialDateSetupActions, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_LoadingScreenSwitchToTempHumScreen, ui_event_LoadingScreenSwitchToTempHumScreen, LV_EVENT_ALL, NULL);
+lv_obj_add_event_cb(ui_LoadingScreenInitialNetworkSetupActions, ui_event_LoadingScreenInitialNetworkSetupActions, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_LoadingScreen, ui_event_LoadingScreen, LV_EVENT_ALL, NULL);
 
 }
@@ -113,6 +286,17 @@ ui_LoadingBox1= NULL;
 ui_LoadingBox2= NULL;
 ui_LoadingBox3= NULL;
 ui_LoadingStatusLabel= NULL;
+ui_InitialDateTimeSetup= NULL;
+ui_LoadingScreenInitialDateSetupActions= NULL;
+ui_LoadingScreenInitialSetupImage= NULL;
+ui_LoadingScreenInitialSetupYearLabel= NULL;
+ui_LoadingScreenInitialSetupMonthLabel= NULL;
+ui_LoadingScreenInitialSetupDayLabel= NULL;
+ui_LoadingScreenInitialSetupHoursLabel= NULL;
+ui_LoadingScreenInitialSetupMinutesLabel= NULL;
 ui_LoadingScreenSwitchToTempHumScreen= NULL;
+ui_InitialNetworkSetup= NULL;
+ui_LoadingScreenInitialNetworkSetupActions= NULL;
+ui_LoadingScreenInitialWifiSetupImage= NULL;
 
 }

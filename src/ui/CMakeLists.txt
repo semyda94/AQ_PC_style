@@ -8,6 +8,8 @@ SET(SOURCES ui_LoadingScreen.c
     ui_img_loadingbox1_png.c
     ui_img_loadingbox2_png.c
     ui_img_loadingbox3_png.c
+    ui_img_datetimesettings_png.c
+    ui_img_initialnetworksetting_png.c
     ui_img_default_screen_png.c
     ui_img_temphummainframe_png.c
     ui_img_datetimetabinactive_png.c

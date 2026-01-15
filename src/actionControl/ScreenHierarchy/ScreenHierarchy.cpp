@@ -1,25 +1,15 @@
+#include <string>
+
 #include "ScreenHierarchy.h"
 #include "../../ui/ui.h"
-#include "../wifiControl/wifiControl.h"
 
-#include <string>
+#include "LoadingScreen.h"
+#include "TempHumScreen.h"
+#include "DateTimeScreen.h"
 
 
 ///////////////////// VARIABLES DECLARATION ////////////////////
-Screen * LoadingScreen = new Screen();
-
-Screen * TempHumScreen = new Screen();
-
-Screen * DateTimeScreen = new Screen();
-
-Screen * SettingsScreen = new Screen();
-Element * NetworkConnectionsElement = new Element();
-Element * AppearanceElement = new Element();
-Element * DateAndTimeElement = new Element();
-
-Screen * NetworkConnectionsScreen = new Screen();
-
-Screen * ActiveScreen = LoadingScreen;
+Screen * ActiveScreen;
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
@@ -57,87 +47,57 @@ void Screen::OnLoad() {
     }
 }
 
-void Element::MoveToNext() {
-    Serial.println("Trying to switch focused element");
 
-    if (ActiveScreen != NULL && ActiveScreen->focusedElement != NULL && ActiveScreen->focusedElement->next) {
-        Serial.println("Active screen focused element has a next element"); 
+void Screen::FocusForm(int formId) {
+    Serial.println("Trying to focus form");
+    
+    if (ActiveScreen != NULL && formId >=0 && formId < ActiveScreen->formsCount) {
+        Serial.println("Form id is valid");
+        if (ActiveScreen->focusedForm != NULL) {
+            Serial.print("Defocus form: ");
+            Serial.println(ActiveScreen->focusedForm->name);
+            if (ActiveScreen->focusedForm->onDefocus != NULL) {
+                ActiveScreen->focusedForm->onDefocus(NULL);
+            }
+        }
 
-        Serial.print("Defocus element:");
-        Serial.println(ActiveScreen->focusedElement->name);
-        lv_event_send(ActiveScreen->focusedElement->eventActor, LV_EVENT_DEFOCUSED, NULL);
-
-        ActiveScreen->focusedElement = ActiveScreen->focusedElement->next;
-
-        Serial.print("Focus next element");
-        Serial.println(ActiveScreen->focusedElement->name);
-        lv_event_send(ActiveScreen->focusedElement->eventActor, LV_EVENT_FOCUSED, NULL);
+        ActiveScreen->focusedForm = &ActiveScreen->forms[formId];
+        Serial.print("Focus form:");
+        Serial.println(ActiveScreen->focusedForm->name);
+        if (ActiveScreen->focusedForm->onFocus != NULL) {
+            ActiveScreen->focusedForm->onFocus(NULL);
+        }
     } else {
-        Serial.println("Active screen focused element doesn't have a next element"); 
+        Serial.println("Form id is not valid");
     }
 }
 
-void Element::MoveToPrevious() {
-    Serial.println("Trying to switch focused element");
+void Screen::DefocusForm() {
+    Serial.println("Trying to defocus form");
+    
+    if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL) {
+        Serial.println("There is a focused form");
 
-    if (ActiveScreen != NULL && ActiveScreen->focusedElement != NULL && ActiveScreen->focusedElement->previous) {
-        Serial.println("Active screen focused element has a previous element"); 
+        Serial.print("Defocus form: ");
+        Serial.println(ActiveScreen->focusedForm->name);
+        if (ActiveScreen->focusedForm->onDefocus != NULL) {
+            ActiveScreen->focusedForm->onDefocus(NULL);
+        }
 
-        Serial.print("Defocus element:");
-        Serial.println(ActiveScreen->focusedElement->name);
-        lv_event_send(ActiveScreen->focusedElement->eventActor, LV_EVENT_DEFOCUSED, NULL);
-
-        ActiveScreen->focusedElement = ActiveScreen->focusedElement->previous;
-
-        Serial.print("Focus next element");
-        Serial.println(ActiveScreen->focusedElement->name);
-        lv_event_send(ActiveScreen->focusedElement->eventActor, LV_EVENT_FOCUSED, NULL);
+        ActiveScreen->focusedForm = NULL;
     } else {
-        Serial.println("Active screen focused element doesn't have a previous element"); 
-    }
-}
-
-void Element::Select() {
-    Serial.println("Trying to select element");
-
-    if (ActiveScreen != NULL && ActiveScreen->focusedElement != NULL && ActiveScreen->focusedElement->ChildScreen) {
-        Serial.println("Active screen focused element has a child screen"); 
-
-        Serial.print("Active screen:");
-        Serial.println(ActiveScreen->name);
-
-        lv_event_send(ActiveScreen->focusedElement->eventActor, LV_EVENT_CLICKED, NULL);
-        Serial.println("switch screen event has been sent");
-        
-        Serial.print("New active screen ");
-        ActiveScreen = ActiveScreen->focusedElement->ChildScreen;
-        Serial.println(ActiveScreen->name);
-        
-        ActiveScreen->OnLoad();
-    } else {
-        Serial.println("Active screen focused element doesn't have a child screen"); 
+        Serial.println("There is no focused form to defocus");
     }
 }
 
 
 void setupScreens()
 {
-    LoadingScreen->Init("LoadingScreen", TempHumScreen, ui_LoadingScreenSwitchToTempHumScreen, NULL);
+    setupLoadingScreen();
+    setupTempHumScreen();
+    setupDateTimeScreen();
 
-    // DataScreen->Init("DataScreen", SettingsScreen, ui_Button1, NULL);
-
-    TempHumScreen->Init("TempHumScreen", TempHumScreen, ui_TempHumNextButton, NULL);
-
-    DateTimeScreen->Init("DateTimeScreen", NULL, NULL, NULL);
-    //Frome Above
-
-    // SettingsScreen->Init("SettingsScreen", DataScreen, ui_Button3, NetworkConnectionsElement);
-    // NetworkConnectionsElement->Init(SettingsScreen, NetworkConnectionsScreen, "NetworkConnections", AppearanceElement, DateAndTimeElement, ui_NetworkConnectionsButton);
-    // AppearanceElement->Init(SettingsScreen, NULL, "Appearance", DateAndTimeElement, NetworkConnectionsElement, ui_AppearenceButton);
-    // DateAndTimeElement->Init(SettingsScreen, NULL, "DateAndTime", NetworkConnectionsElement, AppearanceElement, ui_DateAndTimeButton);
-
-    // NetworkConnectionsScreen->Init("NetworkConnections", SettingsScreen, ui_BackFormnetworkConnections, NULL, &scan);
-
+    ActiveScreen = LoadingScreen;
     Serial.print("Active screen ");
     Serial.println(ActiveScreen->name);
 }

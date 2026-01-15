@@ -41,6 +41,8 @@ LV_IMG_DECLARE( ui_img_loading_screen_png);   // assets/Loading_Screen.png
 LV_IMG_DECLARE( ui_img_loadingbox1_png);   // assets/LoadingBox1.png
 LV_IMG_DECLARE( ui_img_loadingbox2_png);   // assets/LoadingBox2.png
 LV_IMG_DECLARE( ui_img_loadingbox3_png);   // assets/LoadingBox3.png
+LV_IMG_DECLARE( ui_img_datetimesettings_png);   // assets/DateTimeSettings.png
+LV_IMG_DECLARE( ui_img_initialnetworksetting_png);   // assets/InitialNetworkSetting.png
 LV_IMG_DECLARE( ui_img_default_screen_png);   // assets/Default Screen.png
 LV_IMG_DECLARE( ui_img_temphummainframe_png);   // assets/TempHumMainFrame.png
 LV_IMG_DECLARE( ui_img_datetimetabinactive_png);   // assets/DateTimeTabInactive.png

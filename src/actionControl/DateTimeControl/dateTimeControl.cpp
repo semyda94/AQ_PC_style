@@ -4,8 +4,6 @@
 #include <ui/ui_custom/ui_custom_init.h>
 
 #include <time.h>
-#include <Arduino.h>
-#include "RTClib.h"
 
 RTC_DS3231 rtc;
 
@@ -55,6 +53,17 @@ void setupDateTime(void)
     Serial.println("========== END DATE TIME SETUP ==========");
 }
 
+void setupDateTime(DateTime &now) {
+    Serial.println("Setting RTC date time from new configuration");
+    rtc.adjust(now);
+
+    Serial.print("New RTC time: ");
+    printDateTime(now);
+
+    clock_set_time(now.hour(), now.minute());
+    calendar_table_set_month(g_calendar_table, now.year(), now.month(), now.day());
+}
+
 void dateTimeControl(void* pvParameters) 
 {
     
@@ -84,10 +93,21 @@ void dateTimeControl(void* pvParameters)
                 lastDayChecked = now.day();
                 calendar_table_set_month(g_calendar_table, now.year(), now.month(), now.day());
             }
-    }
+        }
     
-    delay(1000);
-  }
+        delay(1000);
+    }
 
   Serial.println("========== END DATE TIME CYCLE ==========");
+}
+
+const char* monthToShortName(int tm_mon)
+{
+    static const char* months[] = {
+        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    };
+
+    if (tm_mon < 0 || tm_mon > 11) return "???";
+    return months[tm_mon];
 }

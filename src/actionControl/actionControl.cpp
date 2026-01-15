@@ -1,15 +1,16 @@
 #include "actionControl.h"
 #include "../ui/ui.h"
+#include "../actionControl/wifiControl/wifiControl.h"
 
 #include "ScreenHierarchy/ScreenHierarchy.h"
 
 ///////////////////// VARIABLES DECLARATION ////////////////////
 
 //Button
-int Button1Pin = 4;
-int Button2Pin = 5;
-int Button3Pin = 6;
-int Button4Pin = 7;
+int Button1Pin = 7;
+int Button2Pin = 6;
+int Button3Pin = 5;
+int Button4Pin = 4;
 
 // Variables will change:
 int lastState1 = HIGH; // the previous state from the input pin
@@ -58,34 +59,82 @@ void actionControl(void* pvParameters)
         Serial.println("Button 1 Released");
     if (lastState1 == HIGH && currentState1 == LOW) {
         Serial.println("Button 1 presed");
-        // ActiveScreen->SwitchScreen();
-        lv_event_send(ui_TempHumNextButton, LV_EVENT_CLICKED, NULL);
-        // // HideAqi_Animation(ui_Wallpaper, 0);
+
+        if (ActiveScreen->isActionable) {
+            //Do thin for actionable screen
+            Serial.println("Screen is actionable");
+        } else {
+            Serial.println("Screen is not actionable, checking focused element");
+
+            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton1 != NULL) {
+                Serial.println("Focused element has onButton1 function");
+                ActiveScreen->focusedForm->onButton1(NULL);
+            } else {
+                Serial.println("Focused element doesn't have onButton1 function");
+            }
+        }
     }
 
     if(lastState2 == LOW && currentState2 == HIGH)
         Serial.println("Button 2 Released");
     if (lastState2 == HIGH && currentState2 == LOW) {
         Serial.println("Button 2 presed");
-        // ActiveScreen->focusedElement->MoveToPrevious();
-        // // lv_event_send(ui_NetworkConnectionsButton, LV_EVENT_FOCUSED, NULL);
-        // // ShowAqi_Animation(ui_Wallpaper, 0);
+
+        if (ActiveScreen->isActionable) {
+            //Do thin for actionable screen
+            Serial.println("Screen is actionable");
+        } else {
+            Serial.println("Screen is not actionable, checking focused element");
+
+            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton2 != NULL) {
+                Serial.println("Focused element has onButton2 function");
+                ActiveScreen->focusedForm->onButton2(NULL);
+            } else {
+                Serial.println("Focused element doesn't have onButton2 function");
+            }
+        }
     }
 
     if(lastState3 == LOW && currentState3 == HIGH)
         Serial.println("Button 3 Released");
     if (lastState3 == HIGH && currentState3 == LOW) {
         Serial.println("Button 3 presed");
-        // ActiveScreen->focusedElement->MoveToNext();
-        // // lv_event_send(ui_NetworkConnectionsButton, LV_EVENT_DEFOCUSED, NULL);
+
+        if (ActiveScreen->isActionable) {
+            //Do thin for actionable screen
+            Serial.println("Screen is actionable");
+        } else {
+            Serial.println("Screen is not actionable, checking focused element");
+
+            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton3 != NULL) {
+                Serial.println("Focused element has onButton3 function");
+                ActiveScreen->focusedForm->onButton3(NULL);
+            } else {
+                Serial.println("Focused element doesn't have onButton3 function");
+            }
+        }
     }
+
 
     if(lastState4 == LOW && currentState4 == HIGH)
         Serial.println("Button 4 Released");
     if (lastState4 == HIGH && currentState4 == LOW) {
         Serial.println("Button 4 presed");
-        // ActiveScreen->focusedElement->Select();
-        // // lv_event_send(ui_Button1, LV_EVENT_CLICKED, NULL);
+
+        if (ActiveScreen->isActionable) {
+            //Do thin for actionable screen
+            Serial.println("Screen is actionable");
+            ActiveScreen->SwitchScreen();
+        } else {
+            Serial.println("Screen is not actionable, checking focused element");
+
+            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton4 != NULL) {
+                Serial.println("Focused element has onButton4 function");
+                ActiveScreen->focusedForm->onButton4(NULL);
+            } else {
+                Serial.println("Focused element doesn't have onButton4 function");
+            }
+        }
     }
 
     // save the last state
@@ -93,6 +142,8 @@ void actionControl(void* pvParameters)
     lastState2 = currentState2;
     lastState3 = currentState3;
     lastState4 = currentState4;
+
+    tickWifiPortal();
     
     delay(10);
   }

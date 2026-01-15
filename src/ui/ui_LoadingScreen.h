@@ -20,8 +20,21 @@ extern lv_obj_t *ui_LoadingBox1;
 extern lv_obj_t *ui_LoadingBox2;
 extern lv_obj_t *ui_LoadingBox3;
 extern lv_obj_t *ui_LoadingStatusLabel;
+extern lv_obj_t *ui_InitialDateTimeSetup;
+extern void ui_event_LoadingScreenInitialDateSetupActions( lv_event_t * e);
+extern lv_obj_t *ui_LoadingScreenInitialDateSetupActions;
+extern lv_obj_t *ui_LoadingScreenInitialSetupImage;
+extern lv_obj_t *ui_LoadingScreenInitialSetupYearLabel;
+extern lv_obj_t *ui_LoadingScreenInitialSetupMonthLabel;
+extern lv_obj_t *ui_LoadingScreenInitialSetupDayLabel;
+extern lv_obj_t *ui_LoadingScreenInitialSetupHoursLabel;
+extern lv_obj_t *ui_LoadingScreenInitialSetupMinutesLabel;
 extern void ui_event_LoadingScreenSwitchToTempHumScreen( lv_event_t * e);
 extern lv_obj_t *ui_LoadingScreenSwitchToTempHumScreen;
+extern lv_obj_t *ui_InitialNetworkSetup;
+extern void ui_event_LoadingScreenInitialNetworkSetupActions( lv_event_t * e);
+extern lv_obj_t *ui_LoadingScreenInitialNetworkSetupActions;
+extern lv_obj_t *ui_LoadingScreenInitialWifiSetupImage;
 // CUSTOM VARIABLES
 
 #ifdef __cplusplus

@@ -1,49 +1,25 @@
+#include <WiFiManager.h> 
+
+#include <Arduino.h>
+#include <WiFi.h>
+#include <WiFiClientSecure.h>
+#include <HTTPClient.h>
+
 #include "wifiControl.h"
-//#include "../../ui/ui.h"
+#include "../../services/configurationStorage.h"
+#include "../ScreenHierarchy/ScreenHierarchy.h"
+
+///////////////////// VARIABLES DECLARATION ////////////////////
+WiFiManager wm;
+
+static bool portalRunning = false;
+static uint32_t portalStartedAt = 0;
+static const uint32_t PORTAL_MAX_MS = 180000; // 3 minutes
 
 ///////////////////// FUNCTIONS DECLARATION ////////////////////
 
 
 ///////////////////// FUNCTIONS IMPLEMENTATION ////////////////////
-
-//SKINNY-Y25TPG
-
-void scan(void)
-{
-    // Set WiFi to station mode and disconnect from an AP if it was previously connected
-    // WiFi.mode(WIFI_STA);
-    // WiFi.disconnect();
-
-    // Serial.println("scan start");
-
-    // // WiFi.scanNetworks will return the number of networks found
-    // int n = WiFi.scanNetworks();
-    // Serial.println("scan done");
-    // if (n == 0) {
-    //     Serial.println("no networks found");
-    // } else {
-    //     Serial.print(n);
-    //     Serial.println(" networks found");
-
-    //     String options="";   // array to hold the options.
-    //     for (int i = 0; i < n; ++i) {
-    //         // Print SSID and RSSI for each network found
-    //         Serial.print(i + 1);
-    //         Serial.print(": ");
-    //         Serial.print(WiFi.SSID(i));
-    //         Serial.print(" (");
-    //         Serial.print(WiFi.RSSI(i));
-    //         Serial.print(")");
-    //         Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
-    //         delay(10);
-    //         options = options + WiFi.SSID(i); // copy Wifi SSID into the options.
-    //         if(i + 1 < n)
-    //           options = options + "\n";
-    //     }
-    //     lv_roller_set_options( ui_WifieNetworksRoller, options.c_str(), LV_ROLLER_MODE_INFINITE );
-    // }
-    // Serial.println("scan ended");   
-}
 
 void get_device_id() {
   Serial.println("========== BEGIN Get Device Id ==========");
@@ -65,7 +41,7 @@ String https_get_device_id() {
   Serial.println("========== BEGIN Get Device Id ==========");
 
   WiFiClientSecure client;
-  client.setInsecure(); // ⚠️ no TLS verification
+  client.setInsecure();
 
   HTTPClient https;
   if (!https.begin(client, "https://aqpcserverside-hfcgh9cmcxhvdjbu.newzealandnorth-01.azurewebsites.net/api/device/1?code=")) return "ERR: begin failed";
@@ -124,34 +100,151 @@ String https_post_create_measurements(
   return payload;
 }
 
-void connectWifi(void)
+void wifiStatusPrint()
+{
+  Serial.print("WiFi status: ");
+  Serial.println(WiFi.status());
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.print("Connected. IP: ");
+    Serial.println(WiFi.localIP());
+    Serial.print("SSID: ");
+    Serial.println(WiFi.SSID());
+  } else {
+    Serial.println("Not connected to WiFi.");
+  }
+}
+
+
+void startWifiPortal()
+{
+  if (portalRunning) return;
+
+  Serial.println("Starting NON-BLOCKING captive portal...");
+
+  wm.setDebugOutput(true);
+  wm.setConfigPortalBlocking(false);  
+  wm.setConfigPortalTimeout(180);
+  wm.setConnectTimeout(20);
+  wm.setWiFiAutoReconnect(true);
+
+  String apName = "AirQualityPC-" + String((uint16_t)(ESP.getEfuseMac() >> 32), HEX);
+  String apPass = "12345678";
+
+  WiFi.mode(WIFI_STA);
+
+  // This returns immediately in non-blocking mode
+  wm.startConfigPortal(apName.c_str(), apPass.c_str());
+
+  portalRunning = true;
+  portalStartedAt = millis();
+
+  Serial.println("End start NON-BLOCKING captive portal...");
+}
+
+void tickWifiPortal()
+{
+  if (!portalRunning) return;
+
+  // Let WiFiManager handle DNS/web server
+  wm.process();
+
+  // If connected, finish
+  if (WiFi.status() == WL_CONNECTED) {
+    Serial.println("Provisioning succeeded (connected).");
+    Serial.printf("IP: %s\n", WiFi.localIP().toString().c_str());
+    Serial.printf("SSID: %s\n", WiFi.SSID().c_str());
+
+    DeviceConfigV1 cfg;
+
+    if (loadConfig(cfg)) {
+      Serial.println("Config loaded from AT24C32 ✅");
+      printConfig(cfg);
+
+      cfg.isConfigured = 1; // mark as configured
+      strncpy(cfg.wifiSsid, WiFi.SSID().c_str(), sizeof(cfg.wifiSsid) - 1); // save new SSID
+      strncpy(cfg.wifiPass, WiFi.psk().c_str(), sizeof(cfg.wifiPass) - 1);  // save new password
+
+      if (saveConfig(cfg)) {
+        Serial.println("Updated config saved ✅");
+        printConfig(cfg);
+      }
+      else Serial.println("Failed to save updated config ❌");
+    } else {
+      Serial.println("No valid config found (first boot) ⚠️ Creating defaults...");
+
+      memset(&cfg, 0, sizeof(cfg));
+      cfg.isConfigured = 0; // first boot
+      cfg.theme = 0;        // default theme
+
+      if (saveConfig(cfg)) Serial.println("Default config saved ✅");
+      else Serial.println("Failed to save config ❌");
+    }
+
+    portalRunning = false;
+
+    if (ActiveScreen->name == "LoadingScreen" && ActiveScreen->focusedForm->name == "InitialNetworkSetup") {
+      Serial.println("Defocusing InitialNetworkSetup form after successful provisioning");
+      ActiveScreen->DefocusForm();
+    }
+    // optional: stop portal components cleanly
+    // wm.stopConfigPortal();
+    return;
+  }
+
+  // Optional: hard timeout (extra safety)
+  if (millis() - portalStartedAt > PORTAL_MAX_MS) {
+    Serial.println("Portal timeout -> stopping");
+    // wm.stopConfigPortal();
+    portalRunning = false;
+
+    if (ActiveScreen->name == "LoadingScreen" && ActiveScreen->focusedForm->name == "InitialNetworkSetup") {
+      Serial.println("Defocusing InitialNetworkSetup form after successful provisioning");
+      ActiveScreen->DefocusForm();
+    }
+  }
+}
+
+void stopWifiPortal()
+{
+  if (!portalRunning) return;
+
+  Serial.println("User canceled portal -> stopping");
+  wm.stopConfigPortal();
+  portalRunning = false;
+
+  WiFi.softAPdisconnect(true);
+}
+
+void connectWifi()
 {
   Serial.println("========== BEGIN WIFI SETUP ==========");
 
-  WiFi.mode(WIFI_STA);
-  WiFi.begin("SKINNY-Y25TPG", "");
+  Serial.println("Starting captive portal provisioning...");
+  wm.resetSettings();
 
-  Serial.print("Connecting to WiFi");
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(400);
-    Serial.print(".");
+  wm.setDebugOutput(true);
+  wm.setConfigPortalBlocking(true);           // Block until configured or timeout
+  wm.setConfigPortalTimeout(180);             // Portal auto-exits after 3 minutes (optional)
+  wm.setConnectTimeout(20);                   // How long to try connecting after user submits
+  wm.setWiFiAutoReconnect(true);
+
+  String apName = "AirQualityPC-"+String((uint16_t)(ESP.getEfuseMac()>>32), HEX);
+  String apPass = "12345678"; // TODO: make this unique per device (recommended)
+  Serial.printf("AP: %s  PASS: %s\n", apName.c_str(), apPass.c_str());
+
+  WiFi.mode(WIFI_STA);
+
+  bool ok = wm.startConfigPortal(apName.c_str(), apPass.c_str());
+
+  if (!ok) {
+    Serial.println("Portal ended without successful connection (timeout/cancel).");
+    return;
   }
 
-  Serial.println();
-  Serial.print("WiFi connected, IP: ");
-  Serial.println(WiFi.localIP());
+  Serial.println("Provisioning succeeded. Connected!");
 
-  get_device_id();
-
-  // https_get_device_id();
-  
-  //https_post_create_measurements();
+  wifiStatusPrint();
 
   Serial.println("========== END WIFI SETUP ==========");
 }
-//    WiFi.onEvent(WiFiEvent);  // Will call WiFiEvent() from another thread.
-//    WiFi.mode(WIFI_MODE_STA);
-//    Serial.println("Starting WPS");
-//    wpsInitConfig();
-//    wpsStart();
 

@@ -171,17 +171,6 @@ void calendar_table_set_month(lv_obj_t* table, int year, int month1_12, int acti
     lv_obj_invalidate(table);
 }
 
-const char* monthToShortName(int tm_mon)
-{
-    static const char* months[] = {
-        "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    };
-
-    if (tm_mon < 0 || tm_mon > 11) return "???";
-    return months[tm_mon];
-}
-
 void clock_set_time(int hour, int minute)
 {
     char timeBuff[20];
