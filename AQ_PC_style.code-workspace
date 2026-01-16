@@ -14,7 +14,26 @@
 			"tft_espi.h": "c",
 			"ui_setup.h": "c",
 			"arduino.h": "c",
-			"ui.h": "c"
+			"ui.h": "c",
+			"typeinfo": "cpp",
+			"functional": "cpp",
+			"freertos.h": "c",
+			"vector": "cpp",
+			"sensirioni2cscd4x.h": "c",
+			"__bit_reference": "cpp",
+			"__hash_table": "cpp",
+			"__split_buffer": "cpp",
+			"__tree": "cpp",
+			"array": "cpp",
+			"deque": "cpp",
+			"forward_list": "cpp",
+			"initializer_list": "cpp",
+			"map": "cpp",
+			"string": "cpp",
+			"string_view": "cpp",
+			"unordered_map": "cpp",
+			"unordered_set": "cpp",
+			"ui_helpers.h": "c"
 		}
 	}
 }

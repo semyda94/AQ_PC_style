@@ -2,14 +2,23 @@
 #include <lvgl.h>
 
 static lv_disp_draw_buf_t draw_buf;
-static lv_color_t buf[ ScreenWidth * ScreenHeight / 10 ];
+// Reduced buffer size to prevent memory issues on ESP32-S3
+// Original: ScreenWidth * ScreenHeight / 10 = 15,360 pixels (30KB)
+// New: ScreenWidth * ScreenHeight / 20 = 7,680 pixels (15KB)
+static lv_color_t buf[ ScreenWidth * ScreenHeight / 20 ];
+unsigned long last_time = millis();
+unsigned long current_time = last_time;
 
 TFT_eSPI tft = TFT_eSPI(ScreenWidth, ScreenHeight); /* TFT instance */
 
 
 void amimationLoop(void* pvParameters){
   while (1) {
-    lv_timer_handler(); /* let the GUI do its work */
+    current_time = millis();
+    lv_tick_inc(current_time - last_time);
+    last_time = current_time;
+    lv_task_handler();
+    // lv_timer_handler(); /* let the GUI do its work */
     delay( 5 );
   }
 }
@@ -38,11 +47,42 @@ void tft_ui_setup(void)
 
   lv_init();
 
-  tft.begin();          /* TFT init */
-  tft.setRotation( 3 ); /* Landscape orientation, flipped */
+  Serial.println( "LV Init done" );
 
+  // Add delay and error checking for TFT initialization
+  delay(100);
+  
+  // Print TFT configuration for debugging
+  Serial.println("TFT Configuration:");
+  Serial.print("Screen Width: "); Serial.println(ScreenWidth);
+  Serial.print("Screen Height: "); Serial.println(ScreenHeight);
+  
+  tft.begin();  
+  tft.setRotation( 1 ); /* Landscape orientation, 3-flipped 1 -normal */
+  // tft.setRotation( 4 ); /*Round*/
 
-  lv_disp_draw_buf_init( &draw_buf, buf, NULL, ScreenWidth * ScreenHeight / 10 );
+  Serial.println( "TFT begin done" );
+
+  /*Initialize the (dummy) input device driver*/
+  static lv_indev_drv_t indev_drv;
+  lv_indev_drv_init( &indev_drv );
+  indev_drv.type = LV_INDEV_TYPE_POINTER;
+  // indev_drv.read_cb = my_touchpad_read;
+  lv_indev_drv_register( &indev_drv );
+    
+  Serial.println( "TFT Setup done" );
+
+  // Check heap after TFT init
+  Serial.print("Free heap after TFT init: ");
+  Serial.println(ESP.getFreeHeap());
+  
+  lv_disp_draw_buf_init( &draw_buf, buf, NULL, ScreenWidth * ScreenHeight / 20 );
+  
+  Serial.println( "LV Draw buf init done" );
+  
+  // Check heap after buffer init
+  Serial.print("Free heap after buffer init: ");
+  Serial.println(ESP.getFreeHeap());
 
   /*Initialize the display*/
   static lv_disp_drv_t disp_drv;
@@ -54,27 +94,10 @@ void tft_ui_setup(void)
   disp_drv.draw_buf = &draw_buf;
   lv_disp_drv_register( &disp_drv );
 
-  /*Initialize the (dummy) input device driver*/
-  static lv_indev_drv_t indev_drv;
-  lv_indev_drv_init( &indev_drv );
-  indev_drv.type = LV_INDEV_TYPE_POINTER;
-  // indev_drv.read_cb = my_touchpad_read;
-  lv_indev_drv_register( &indev_drv );
-    
-  Serial.println( "TFT Setup done" );
+  Serial.println( "LV Disp driver init done" );
 
   /* Init SquareLine prepared UI */
   ui_init();
 
   Serial.println( "UI Setup done" );
-
-  xTaskCreatePinnedToCore (
-    amimationLoop,     // Function to implement the task
-    "amimationLoop",   // Name of the task
-    4096*2,      // Stack size in words
-    NULL,      // Task input parameter
-    5,         // Priority of the task
-    NULL,      // Task handle.
-    0          // Core where the task should run
-  );
 }
