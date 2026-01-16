@@ -45,10 +45,6 @@ void tft_ui_setup(void)
   Serial.println( LVGL_Arduino );
   Serial.println( "I am LVGL_Arduino" );
 
-  // Check available heap before initialization
-  Serial.print("Free heap before init: ");
-  Serial.println(ESP.getFreeHeap());
-
   lv_init();
 
   Serial.println( "LV Init done" );
