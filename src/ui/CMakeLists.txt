@@ -1,6 +1,7 @@
 SET(SOURCES ui_LoadingScreen.c
     ui_TempHumScreen.c
     ui_DateTimeScreen.c
+    ui_SettingsScreen.c
     ui.c
     ui_comp_hook.c
     ui_helpers.c
@@ -21,6 +22,10 @@ SET(SOURCES ui_LoadingScreen.c
     ui_img_datetimetabactive_png.c
     ui_img_previousbuttonactive_png.c
     ui_img_minutearrow_png.c
-    ui_img_hourarrow_png.c)
+    ui_img_hourarrow_png.c
+    ui_img_networkicon_png.c
+    ui_img_appearenceicon_png.c
+    ui_img_datetimeicon_png.c
+    ui_img_enterbuttonactive_png.c)
 
 add_library(ui ${SOURCES})

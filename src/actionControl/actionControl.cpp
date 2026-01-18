@@ -31,8 +31,6 @@ int currentState4;     // the current reading from the input pin
 
 void setupActionButtons(void)
 {
-    setupScreens();
-
     Serial.println("========== BEGIN ACTION BUTTONS SETUP ==========");
 
     //Switch button
@@ -55,84 +53,135 @@ void actionControl(void* pvParameters)
     currentState3 = digitalRead(Button3Pin);
     currentState4 = digitalRead(Button4Pin);
 
-    if(lastState1 == LOW && currentState1 == HIGH)
-        Serial.println("Button 1 Released");
-    if (lastState1 == HIGH && currentState1 == LOW) {
-        Serial.println("Button 1 presed");
+    if(lastState1 == LOW && currentState1 == HIGH) {
+                Serial.println("Button 1 presed");
 
         if (ActiveScreen->isActionable) {
             //Do thin for actionable screen
             Serial.println("Screen is actionable");
+            ActiveScreen->handleButton1();
         } else {
             Serial.println("Screen is not actionable, checking focused element");
 
-            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton1 != NULL) {
-                Serial.println("Focused element has onButton1 function");
-                ActiveScreen->focusedForm->onButton1(NULL);
+            if (ActiveScreen != nullptr && 
+                ActiveScreen->focusedForm != nullptr && 
+                ActiveScreen->focusedForm->onButton1 != nullptr
+            ) {
+                Serial.println("Focused form has onButton1 function");
+                ActiveScreen->focusedForm->onButton1(nullptr);
             } else {
-                Serial.println("Focused element doesn't have onButton1 function");
+                Serial.println("Focused form doesn't have onButton1 function checking focused element");
+
+                if (ActiveScreen != nullptr && 
+                    ActiveScreen->focusedForm != nullptr && 
+                    ActiveScreen->focusedForm->focusedElement != nullptr &&
+                    ActiveScreen->focusedForm->focusedElement->onButton1 != nullptr
+                ) {
+                    Serial.println("Focused element has onButton1 function");
+                    ActiveScreen->focusedForm->focusedElement->onButton1(nullptr);
+                } else {
+                    Serial.println("Focused element doesn't have onButton1 function");
+                }
             }
         }
     }
 
-    if(lastState2 == LOW && currentState2 == HIGH)
-        Serial.println("Button 2 Released");
-    if (lastState2 == HIGH && currentState2 == LOW) {
+    if(lastState2 == LOW && currentState2 == HIGH) {
         Serial.println("Button 2 presed");
 
         if (ActiveScreen->isActionable) {
             //Do thin for actionable screen
             Serial.println("Screen is actionable");
+            ActiveScreen->handleButton2();
         } else {
             Serial.println("Screen is not actionable, checking focused element");
 
-            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton2 != NULL) {
-                Serial.println("Focused element has onButton2 function");
+            if (ActiveScreen != NULL && 
+                ActiveScreen->focusedForm != NULL && 
+                ActiveScreen->focusedForm->onButton2 != NULL
+            ) {
+                Serial.println("Focused form has onButton2 function");
                 ActiveScreen->focusedForm->onButton2(NULL);
             } else {
-                Serial.println("Focused element doesn't have onButton2 function");
+                Serial.println("Focused form doesn't have onButton2 function checking focused element");
+
+                if (ActiveScreen != nullptr &&
+                    ActiveScreen->focusedForm != nullptr &&
+                    ActiveScreen->focusedForm->focusedElement != nullptr &&
+                    ActiveScreen->focusedForm->focusedElement->onButton2 != nullptr
+                ) {
+                    Serial.println("Focused element has onButton2 function");
+                    ActiveScreen->focusedForm->focusedElement->onButton2(nullptr);
+                } else {
+                    Serial.println("Focused element doesn't have onButton2 function");
+                }
             }
         }
     }
 
-    if(lastState3 == LOW && currentState3 == HIGH)
-        Serial.println("Button 3 Released");
-    if (lastState3 == HIGH && currentState3 == LOW) {
+    if(lastState3 == LOW && currentState3 == HIGH) {
         Serial.println("Button 3 presed");
 
         if (ActiveScreen->isActionable) {
             //Do thin for actionable screen
             Serial.println("Screen is actionable");
+            ActiveScreen->handleButton3();
         } else {
             Serial.println("Screen is not actionable, checking focused element");
 
-            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton3 != NULL) {
-                Serial.println("Focused element has onButton3 function");
+            if (ActiveScreen != NULL && 
+                ActiveScreen->focusedForm != NULL && 
+                ActiveScreen->focusedForm->onButton3 != NULL
+            ) {
+                Serial.println("Focused form has onButton3 function");
                 ActiveScreen->focusedForm->onButton3(NULL);
             } else {
-                Serial.println("Focused element doesn't have onButton3 function");
+                Serial.println("Focused form doesn't have onButton3 function checking focused element");
+
+                if (ActiveScreen != nullptr &&
+                    ActiveScreen->focusedForm != nullptr &&
+                    ActiveScreen->focusedForm->focusedElement != nullptr &&
+                    ActiveScreen->focusedForm->focusedElement->onButton3 != nullptr
+                ) {
+                    Serial.println("Focused element has onButton3 function");
+                    ActiveScreen->focusedForm->focusedElement->onButton3(nullptr);
+                } else {
+                    Serial.println("Focused element doesn't have onButton3 function");
+                }
             }
         }
     }
 
 
-    if(lastState4 == LOW && currentState4 == HIGH)
-        Serial.println("Button 4 Released");
-    if (lastState4 == HIGH && currentState4 == LOW) {
+    if(lastState4 == LOW && currentState4 == HIGH) {
         Serial.println("Button 4 presed");
 
         if (ActiveScreen->isActionable) {
             //Do thin for actionable screen
             Serial.println("Screen is actionable");
-            ActiveScreen->SwitchScreen();
+            ActiveScreen->handleButton4();
         } else {
             Serial.println("Screen is not actionable, checking focused element");
 
-            if (ActiveScreen != NULL && ActiveScreen->focusedForm != NULL && ActiveScreen->focusedForm->onButton4 != NULL) {
-                Serial.println("Focused element has onButton4 function");
+            if (ActiveScreen != NULL && 
+                ActiveScreen->focusedForm != NULL && 
+                ActiveScreen->focusedForm->onButton4 != NULL
+            ) {
+                Serial.println("Focused form has onButton4 function");
                 ActiveScreen->focusedForm->onButton4(NULL);
             } else {
-                Serial.println("Focused element doesn't have onButton4 function");
+                Serial.println("Focused form doesn't have onButton4 function checking focused element");
+
+                if (ActiveScreen != NULL && 
+                    ActiveScreen->focusedForm != NULL &&
+                    ActiveScreen->focusedForm->focusedElement != NULL &&
+                    ActiveScreen->focusedForm->focusedElement->onButton4 != NULL
+                ) {
+                    Serial.println("Focused element has onButton4 function");
+                    ActiveScreen->focusedForm->focusedElement->onButton4(NULL);
+                } else {
+                    Serial.println("Focused element doesn't have onButton4 function");
+                }
             }
         }
     }

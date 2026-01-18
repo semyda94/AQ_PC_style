@@ -29,6 +29,7 @@ extern "C" {
 #include "ui_LoadingScreen.h"
 #include "ui_TempHumScreen.h"
 #include "ui_DateTimeScreen.h"
+#include "ui_SettingsScreen.h"
 
 ///////////////////// VARIABLES ////////////////////
 extern lv_anim_t * LoadingBar_Animation( lv_obj_t *TargetObject, int delay);
@@ -55,6 +56,10 @@ LV_IMG_DECLARE( ui_img_datetimetabactive_png);   // assets/DateTimeTabActive.png
 LV_IMG_DECLARE( ui_img_previousbuttonactive_png);   // assets/PreviousButtonActive.png
 LV_IMG_DECLARE( ui_img_minutearrow_png);   // assets/MinuteArrow.png
 LV_IMG_DECLARE( ui_img_hourarrow_png);   // assets/HourArrow.png
+LV_IMG_DECLARE( ui_img_networkicon_png);   // assets/NetworkIcon.png
+LV_IMG_DECLARE( ui_img_appearenceicon_png);   // assets/AppearenceIcon.png
+LV_IMG_DECLARE( ui_img_datetimeicon_png);   // assets/DateTimeIcon.png
+LV_IMG_DECLARE( ui_img_enterbuttonactive_png);   // assets/EnterButtonActive.png
 
 // UI INIT
 void ui_init(void);

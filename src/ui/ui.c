@@ -62,6 +62,7 @@ lv_disp_set_theme(dispp, theme);
 ui_LoadingScreen_screen_init();
 ui_TempHumScreen_screen_init();
 ui_DateTimeScreen_screen_init();
+ui_SettingsScreen_screen_init();
 
 ui_custom_init();
 
@@ -73,4 +74,5 @@ void ui_destroy( void )
 {ui_LoadingScreen_screen_destroy();
 ui_TempHumScreen_screen_destroy();
 ui_DateTimeScreen_screen_destroy();
+ui_SettingsScreen_screen_destroy();
 }
