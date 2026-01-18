@@ -4,10 +4,11 @@
 
 #include "UiSetup/ui_setup.h"
 #include "sensors/sensors.h"
+#include "services/configurationStorage.h"
 #include "actionControl/actionControl.h"
 #include "actionControl/DateTimeControl/dateTimeControl.h"
 #include "actionControl/wifiControl/wifiControl.h"
-#include "services/configurationStorage.h"
+#include "actionControl/ScreenHierarchy/ScreenHierarchy.h"
 
 //On Led
 int ArduinoLED = 18;
@@ -52,9 +53,9 @@ void setup() {
     Serial.println("Config loaded from AT24C32 ✅");
     printConfig(cfg);
 
-    // cfg.isConfigured = 0; // mark as not configured for testing
-    // saveConfig(cfg);
-    // Serial.println("Marked config as not configured for testing ❌");
+    cfg.isConfigured = 0; // mark as not configured for testing
+    saveConfig(cfg);
+    Serial.println("Marked config as not configured for testing ❌");
   } else {
     Serial.println("No valid config found (first boot) ⚠️ Creating defaults...");
 
@@ -111,7 +112,7 @@ void setup() {
   delay(2000);
 
   if (!cfg.isConfigured) {
-    ActiveScreen->FocusForm(0);
+    ActiveScreen->focusForm("DateTimeSetupForm");
   }
 
   while (ActiveScreen->focusedForm != NULL)
@@ -127,7 +128,7 @@ void setup() {
   delay(2000);
 
   if (!cfg.isConfigured) {
-    ActiveScreen->FocusForm(1);
+    ActiveScreen->focusForm("NetworkSetupForm");
   }
 
 
@@ -163,7 +164,7 @@ void setup() {
 
   delay(2000);
 
-  ActiveScreen->SwitchScreen();
+  ActiveScreen->switchToNext();
 
 }
 

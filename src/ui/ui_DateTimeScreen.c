@@ -7,6 +7,14 @@
 
 lv_obj_t *ui_DateTimeScreen = NULL;lv_obj_t *ui_DateTimeScreenBg = NULL;lv_obj_t *ui_DateTimeScreenMainAppFrame = NULL;lv_obj_t *ui_DateTimeScreenMainAppImg = NULL;lv_obj_t *ui_DateTimeScreenTabs = NULL;lv_obj_t *ui_DateTimeScreenHomeTab = NULL;lv_obj_t *ui_DateTimeScreenSettingsTab = NULL;lv_obj_t *ui_DateTimeScreenDateTimeTab = NULL;lv_obj_t *ui_DateTimeScreenMonthLabel = NULL;lv_obj_t *ui_DateTimeScreenCalendarContainer = NULL;lv_obj_t *ui_DateTimeScreenYearLabel = NULL;lv_obj_t *ui_DateTimeScreenButtons = NULL;lv_obj_t *ui_DateTimeScreenNextButton = NULL;lv_obj_t *ui_DateTimeScreenPreviousButton = NULL;lv_obj_t *ui_DateTimeScreenTimeLabel = NULL;lv_obj_t *ui_HoursContainer = NULL;lv_obj_t *ui_MinuteArrow = NULL;lv_obj_t *ui_HourArrow = NULL;
 // event funtions
+void ui_event_DateTimeScreenNextButton( lv_event_t * e) {
+    lv_event_code_t event_code = lv_event_get_code(e);
+
+if ( event_code == LV_EVENT_CLICKED) {
+      _ui_screen_change( &ui_SettingsScreen, LV_SCR_LOAD_ANIM_NONE, 0, 0, &ui_SettingsScreen_screen_init);
+}
+}
+
 void ui_event_DateTimeScreenPreviousButton( lv_event_t * e) {
     lv_event_code_t event_code = lv_event_get_code(e);
 
@@ -182,6 +190,7 @@ lv_obj_clear_flag( ui_HourArrow, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 lv_img_set_pivot(ui_HourArrow,5,40);
 lv_img_set_angle(ui_HourArrow,900);
 
+lv_obj_add_event_cb(ui_DateTimeScreenNextButton, ui_event_DateTimeScreenNextButton, LV_EVENT_ALL, NULL);
 lv_obj_add_event_cb(ui_DateTimeScreenPreviousButton, ui_event_DateTimeScreenPreviousButton, LV_EVENT_ALL, NULL);
 
 }

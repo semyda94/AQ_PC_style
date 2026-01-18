@@ -6,8 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include "ScreenHierarchy.h"
-#include "../../ui/ui.h"
+#include "../../ScreenHierarchy.h"
 
 
 void setupLoadingScreen();

@@ -184,7 +184,7 @@ void tickWifiPortal()
 
     if (ActiveScreen->name == "LoadingScreen" && ActiveScreen->focusedForm->name == "InitialNetworkSetup") {
       Serial.println("Defocusing InitialNetworkSetup form after successful provisioning");
-      ActiveScreen->DefocusForm();
+      ActiveScreen->defocusCurrentForm();
     }
     // optional: stop portal components cleanly
     // wm.stopConfigPortal();
@@ -199,7 +199,7 @@ void tickWifiPortal()
 
     if (ActiveScreen->name == "LoadingScreen" && ActiveScreen->focusedForm->name == "InitialNetworkSetup") {
       Serial.println("Defocusing InitialNetworkSetup form after successful provisioning");
-      ActiveScreen->DefocusForm();
+      ActiveScreen->defocusCurrentForm();
     }
   }
 }

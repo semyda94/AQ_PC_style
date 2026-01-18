@@ -25,6 +25,7 @@ extern lv_obj_t *ui_DateTimeScreenMonthLabel;
 extern lv_obj_t *ui_DateTimeScreenCalendarContainer;
 extern lv_obj_t *ui_DateTimeScreenYearLabel;
 extern lv_obj_t *ui_DateTimeScreenButtons;
+extern void ui_event_DateTimeScreenNextButton( lv_event_t * e);
 extern lv_obj_t *ui_DateTimeScreenNextButton;
 extern void ui_event_DateTimeScreenPreviousButton( lv_event_t * e);
 extern lv_obj_t *ui_DateTimeScreenPreviousButton;

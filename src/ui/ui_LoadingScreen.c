@@ -93,7 +93,7 @@ lv_obj_add_flag( ui_LoadingBox3, LV_OBJ_FLAG_ADV_HITTEST );   /// Flags
 lv_obj_clear_flag( ui_LoadingBox3, LV_OBJ_FLAG_SCROLLABLE );    /// Flags
 
 ui_LoadingStatusLabel = lv_label_create(ui_LoadingScreenBg);
-lv_obj_set_width( ui_LoadingStatusLabel, 200);
+lv_obj_set_width( ui_LoadingStatusLabel, 300);
 lv_obj_set_height( ui_LoadingStatusLabel, LV_SIZE_CONTENT);   /// 1
 lv_obj_set_x( ui_LoadingStatusLabel, 0 );
 lv_obj_set_y( ui_LoadingStatusLabel, 80 );
