@@ -53,9 +53,9 @@ void setup() {
     Serial.println("Config loaded from AT24C32 ✅");
     printConfig(cfg);
 
-    cfg.isConfigured = 0; // mark as not configured for testing
-    saveConfig(cfg);
-    Serial.println("Marked config as not configured for testing ❌");
+    // cfg.isConfigured = 0; // mark as not configured for testing
+    // saveConfig(cfg);
+    // Serial.println("Marked config as not configured for testing ❌");
   } else {
     Serial.println("No valid config found (first boot) ⚠️ Creating defaults...");
 

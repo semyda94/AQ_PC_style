@@ -106,7 +106,7 @@ void Screen::onLoadScreen() {
     }
 }
 
-//Forms management
+//Forms navigation methods
 void Screen::addForm(Form* form) {
     if (form != nullptr) {
         forms.push_back(form);
@@ -152,4 +152,53 @@ void Screen::defocusCurrentForm() {
     } else {
         Serial.println("No focused form to defocus on screen '" + this->name + "'");
     }
+}
+
+//Add elements to screen
+void Screen::addElement(Element* element) {
+    if (element != nullptr) {
+        elements.push_back(element);
+        Serial.println("Added element to Screen '" + name + "'. Total elements count: " + String(elements.size()));
+    } else {
+        Serial.println("Warning: Attempted to add null element to Screen '" + name + "'");
+    }
+}
+
+// Elements navigation methods
+
+void Screen::focusNextElement(){
+    Serial.println("Focusing next element in Screen: " + name + ". Current focusedElementId: " + String(focusedElementId) + ", total elements: " + String(elements.size()));
+    if (elements.size() == 0) {
+        Serial.println("No elements in Screen: " + name);
+        return;
+    }
+    // Handle initial state or move to next element
+    if (focusedElementId == -1 || focusedElementId < (int)(elements.size() - 1)) {
+        if (focusedElement != nullptr) {
+            focusedElement->defocusElement(); // Defocus current element
+        } else {
+            Serial.println("No currently focused element in Screen: " + name + ", first element will be focused.");
+        }
+        focusedElementId++;
+        focusedElement = elements[focusedElementId];
+        focusedElement->focusElement(); // Focus new element
+        Serial.println("Focused element is now: " + String(focusedElement->name));
+    } else {
+        Serial.println("Already at the last element in Screen: " + name);
+    }
+}
+
+void Screen::focusPreviousElement() {
+    if (elements.size() == 0) {
+        Serial.println("No elements in Screen: " + name);
+        return;
+    }
+    if (focusedElementId > 0) {
+        focusedElement->defocusElement(); // Defocus current element
+        focusedElementId--;
+        focusedElement = elements[focusedElementId];
+        focusedElement->focusElement(); // Focus new element
+    } else {
+        Serial.println("Already at the first element in Screen: " + name);
+    } 
 }

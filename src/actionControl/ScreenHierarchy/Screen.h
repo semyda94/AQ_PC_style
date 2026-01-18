@@ -28,8 +28,13 @@ public:
     lv_obj_t* previousScreenSwitchEventActor; //Actor to trigger switch to previous screen
     
     int focusedFormId = -1;
-    std::vector<Form*> forms;
     Form* focusedForm = nullptr;
+    std::vector<Form*> forms;
+
+
+    int focusedElementId = -1;
+    Element* focusedElement = nullptr;
+    std::vector<Element*> elements;
 
     // Constructor for better initialization
     Screen(
@@ -55,11 +60,17 @@ public:
     void switchToNext();
     void switchToPrevious();
     
-    // Form management
+    // Form navigation methods
     void focusNextForm();
     void focusPreviousForm();
     void focusForm(String name);
     void defocusCurrentForm();
+
+    // Element navigation methods
+    void focusNextElement();
+    void focusPreviousElement();
+    // void focusElement(int elementId);
+    // void defocusCurrentElement();
     
     // Button handlers - each button has a specific purpose
     void handleButton1();  // Back/exit
@@ -70,6 +81,9 @@ public:
     
     // Add forms to screen
     void addForm(Form* form);
+    
+    //Add elements to screen
+    void addElement(Element* element);
 
 private:
     void updateFocusedForm();

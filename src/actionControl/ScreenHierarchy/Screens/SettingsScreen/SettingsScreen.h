@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include "../ScreenHierarchy.h"
+#include "../../Screen.h"
 
 
 void setupSettingsScreen();
